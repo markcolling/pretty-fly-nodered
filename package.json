@@ -1,0 +1,12 @@
+{
+    "name": "prettyfly_nodered",
+    "description": "A Node-RED Project",
+    "version": "0.0.1",
+    "dependencies": {},
+    "node-red": {
+        "settings": {
+            "flowFile": "flows_prettyflypi.json",
+            "credentialsFile": "flows_prettyflypi_cred.json"
+        }
+    }
+}
