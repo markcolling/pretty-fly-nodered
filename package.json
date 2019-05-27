@@ -2,7 +2,9 @@
     "name": "prettyfly_nodered",
     "description": "A Node-RED Project",
     "version": "0.0.1",
-    "dependencies": {},
+    "dependencies": {
+        "node-red-contrib-alexa-home-skill": "0.1.17"
+    },
     "node-red": {
         "settings": {
             "flowFile": "flows_prettyflypi.json",
