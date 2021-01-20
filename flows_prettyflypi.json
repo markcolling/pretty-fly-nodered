@@ -464,6 +464,19 @@
         "verifyservercert": false
     },
     {
+        "id": "c554ac1b.11e4",
+        "type": "chatbot-telegram-node",
+        "botname": "Pfhassbot",
+        "usernames": "1308833361",
+        "providerToken": "1330235613:AAE7UHhGQPgzvSc-MJsFnk4KyF5YaU91s5Y",
+        "polling": "1000",
+        "store": "",
+        "log": "pfhassbot_chat_log",
+        "debug": false,
+        "webHook": "",
+        "connectMode": "polling"
+    },
+    {
         "id": "966c07b8.c25848",
         "type": "inject",
         "z": "b380ea3.5456418",
@@ -9914,7 +9927,8 @@
         "y": 380,
         "wires": [
             [
-                "19427381.656fcc"
+                "19427381.656fcc",
+                "f682f5be.63caf8"
             ]
         ]
     },
@@ -9961,7 +9975,7 @@
         "name": "Charging Trigger",
         "info": "",
         "x": 120,
-        "y": 580,
+        "y": 620,
         "wires": []
     },
     {
@@ -9971,7 +9985,7 @@
         "name": "Set/Store Variables",
         "info": "",
         "x": 130,
-        "y": 640,
+        "y": 940,
         "wires": []
     },
     {
@@ -10049,8 +10063,8 @@
         "qos": "2",
         "datatype": "auto",
         "broker": "b113ebbe.a57308",
-        "x": 870,
-        "y": 620,
+        "x": 1170,
+        "y": 600,
         "wires": [
             [
                 "6a393c56.3e3054"
@@ -10069,8 +10083,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1070,
-        "y": 620,
+        "x": 1370,
+        "y": 600,
         "wires": []
     },
     {
@@ -10085,8 +10099,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1070,
-        "y": 700,
+        "x": 1370,
+        "y": 680,
         "wires": []
     },
     {
@@ -10098,8 +10112,8 @@
         "qos": "2",
         "datatype": "auto",
         "broker": "b113ebbe.a57308",
-        "x": 910,
-        "y": 700,
+        "x": 1210,
+        "y": 680,
         "wires": [
             [
                 "8838aa38.24c5c8"
@@ -10165,7 +10179,7 @@
         "y": 380,
         "wires": [
             [
-                "f682f5be.63caf8"
+                "ee259e2d.8e0a9"
             ]
         ]
     },
@@ -10190,13 +10204,13 @@
         "type": "function",
         "z": "9d235989.43e7e8",
         "name": "Calc charge",
-        "func": "var ratelist = flow.get('ratelist');\nvar target_time = flow.get('target_time');\nvar charge_reqd_sessions = flow.get('charge_reqd_sessions');\nvar schedule = flow.get('schedule');\n//Iterate through rate list to remove times after target\n\nvar i;\nvar curr = new Date()\nvar ratelist_short = ratelist;\n\nfor (i in ratelist) {\n  var d = new Date(i);\n  if (d >= target_time) {\n    delete ratelist_short[i];\n  } else if (d < curr) {\n    delete ratelist_short[i];\n  };\n}\n\n//Sort ratelist into cheapest > most expensive\nfunction compare(a, b) {\n  return a[1] - b[1];\n}\n\nvar array = Object.entries(ratelist_short);\narray.sort(compare);\n\n//Find number of sessions\nvar array_top = array.slice(0,charge_reqd_sessions);\n\nmsg.array_top = array_top;\n\n//Mark charging sessions as true\nfor (i in array_top) {\n    var charge_date = array_top[i][0].toString();\n    schedule[charge_date][\"charge\"] = true;;\n}\n  \nmsg.schedule = schedule;\n\nflow.set('schedule',schedule);\n\nreturn msg;",
+        "func": "var ratelist = flow.get('ratelist');\nvar target_time = flow.get('target_time');\nvar charge_reqd_sessions = flow.get('charge_reqd_sessions');\nvar schedule = flow.get('schedule');\n//Iterate through rate list to remove times after target\n\nvar i;\nvar curr = new Date()\nvar ratelist_short = ratelist;\n\nfor (i in ratelist) {\n  var d = new Date(i);\n  if (d >= target_time) {\n    delete ratelist_short[i];\n  } else if (d < curr) {\n    delete ratelist_short[i];\n  }\n}\n\n//Sort ratelist into cheapest > most expensive\nfunction compare(a, b) {\n  return a[1] - b[1];\n}\n\nvar array = Object.entries(ratelist_short);\narray.sort(compare);\n\n//Find number of sessions\nvar array_top = array.slice(0,charge_reqd_sessions);\n\nmsg.array_top = array_top;\n\n//Mark charging sessions as true\nfor (i in array_top) {\n    var charge_date = array_top[i][0].toString();\n    schedule[charge_date][\"charge\"] = true;\n}\n  \nmsg.schedule = schedule;\n\nflow.set('schedule',schedule);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 990,
-        "y": 420,
+        "x": 1090,
+        "y": 440,
         "wires": [
             [
                 "c8bc3fa0.f1668"
@@ -10319,8 +10333,304 @@
         "y": 560,
         "wires": [
             [
-                "bb22b434.6d70a8"
+                "ee259e2d.8e0a9"
             ]
+        ]
+    },
+    {
+        "id": "605389a1.550af8",
+        "type": "inject",
+        "z": "9d235989.43e7e8",
+        "name": "Check tesla info",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 680,
+        "wires": [
+            [
+                "36076e2f.3988e2"
+            ]
+        ]
+    },
+    {
+        "id": "36076e2f.3988e2",
+        "type": "api-current-state",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "home",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "device_tracker.tesla_location",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 430,
+        "y": 680,
+        "wires": [
+            [
+                "8fce1bf7.a95fe8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "8fce1bf7.a95fe8",
+        "type": "api-current-state",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "true",
+        "halt_if_type": "bool",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "sensor.tesla_plugged_in",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 410,
+        "y": 720,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "efa7b5d6.d5e128",
+        "type": "chatbot-telegram-send",
+        "z": "9d235989.43e7e8",
+        "bot": "c554ac1b.11e4",
+        "botProduction": "c554ac1b.11e4",
+        "track": false,
+        "passThrough": true,
+        "errorOutput": true,
+        "outputs": 2,
+        "x": 870,
+        "y": 860,
+        "wires": [
+            [
+                "e13e141a.be6df8"
+            ],
+            [
+                "e13e141a.be6df8"
+            ]
+        ]
+    },
+    {
+        "id": "3d601fe.7a574e",
+        "type": "inject",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 320,
+        "y": 860,
+        "wires": [
+            [
+                "5407bfe.bd8954"
+            ]
+        ]
+    },
+    {
+        "id": "e13e141a.be6df8",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1150,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "238a1162.1996ce",
+        "type": "chatbot-telegram-receive",
+        "z": "9d235989.43e7e8",
+        "bot": "c554ac1b.11e4",
+        "botProduction": "c554ac1b.11e4",
+        "x": 270,
+        "y": 1060,
+        "wires": [
+            [
+                "e656bba1.7530a8"
+            ]
+        ]
+    },
+    {
+        "id": "5407bfe.bd8954",
+        "type": "chatbot-conversation",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "botDevelopment": "c554ac1b.11e4",
+        "botProduction": "c554ac1b.11e4",
+        "chatId": "-460888439",
+        "userId": "",
+        "transport": "telegram",
+        "store": "",
+        "x": 490,
+        "y": 860,
+        "wires": [
+            [
+                "a509231c.a1a21"
+            ]
+        ]
+    },
+    {
+        "id": "a509231c.a1a21",
+        "type": "chatbot-ask",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "buttons": [
+            {
+                "type": "keyboardButton",
+                "label": "Today"
+            },
+            {
+                "type": "keyboardButton",
+                "label": "Tomorrow"
+            },
+            {
+                "type": "keyboardButton",
+                "label": "Tomorrow plus 1"
+            }
+        ],
+        "message": "Pick a date",
+        "x": 670,
+        "y": 860,
+        "wires": [
+            [
+                "efa7b5d6.d5e128"
+            ]
+        ]
+    },
+    {
+        "id": "c3fb25c6.16b4e8",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "e656bba1.7530a8",
+        "type": "chatbot-rules",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "rules": [
+            {
+                "type": "command",
+                "command": "/charge_car"
+            },
+            {
+                "type": "catchAll"
+            }
+        ],
+        "outputs": 2,
+        "x": 480,
+        "y": 1120,
+        "wires": [
+            [
+                "c3fb25c6.16b4e8"
+            ],
+            [
+                "9413eb88.064718"
+            ]
+        ]
+    },
+    {
+        "id": "9413eb88.064718",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "ee259e2d.8e0a9",
+        "type": "join-wait",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "paths": "",
+        "pathsToExpire": "",
+        "useRegex": false,
+        "warnUnmatched": true,
+        "pathTopic": "topic",
+        "pathTopicType": "msg",
+        "correlationTopic": "",
+        "correlationTopicType": "undefined",
+        "timeout": 15000,
+        "timeoutUnits": 1,
+        "exactOrder": "false",
+        "firstMsg": "true",
+        "mapPayload": "false",
+        "disableComplete": false,
+        "x": 920,
+        "y": 440,
+        "wires": [
+            [
+                "bb22b434.6d70a8"
+            ],
+            []
         ]
     }
 ]
