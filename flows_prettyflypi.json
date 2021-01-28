@@ -142,7 +142,7 @@
     {
         "id": "d8526939.b993a8",
         "type": "tab",
-        "label": "Flow 3",
+        "label": "Telegram Notifications",
         "disabled": false,
         "info": ""
     },
@@ -401,6 +401,7 @@
     {
         "id": "a0589f1a.811e8",
         "type": "telegram bot",
+        "d": true,
         "botname": "Home Assistant Logs",
         "usernames": "",
         "chatids": "",
@@ -424,14 +425,14 @@
     {
         "id": "d4f057b1.bf3418",
         "type": "influxdb",
-        "hostname": "127.0.0.1",
+        "hostname": "influxdb",
         "port": "8086",
         "protocol": "http",
-        "database": "database",
+        "database": "energy.autogen",
         "name": "",
         "usetls": false,
         "tls": "",
-        "influxdbVersion": "1.8-flux",
+        "influxdbVersion": "1.x",
         "url": "http://influxdb:8086",
         "rejectUnauthorized": false
     },
@@ -472,6 +473,19 @@
         "polling": "1000",
         "store": "",
         "log": "pfhassbot_chat_log",
+        "debug": false,
+        "webHook": "",
+        "connectMode": "polling"
+    },
+    {
+        "id": "61c78e43.6e203",
+        "type": "chatbot-telegram-node",
+        "botname": "pfnodered_bot",
+        "usernames": "1308833361",
+        "providerToken": "1502180117:AAHpM844ZEPUP0-jwtiDBWpB3fQRYbduZNQ",
+        "polling": "1000",
+        "store": "",
+        "log": "",
         "debug": false,
         "webHook": "",
         "connectMode": "polling"
@@ -8281,8 +8295,8 @@
         "wires": [
             [
                 "b840dcb4.8e46a",
-                "40979b6e.49bc04",
-                "97b90f05.c563"
+                "97b90f05.c563",
+                "40979b6e.49bc04"
             ]
         ]
     },
@@ -8324,8 +8338,8 @@
         "entityLocationType": "none",
         "checkCurrentState": true,
         "blockInputOverrides": false,
-        "x": 790,
-        "y": 300,
+        "x": 810,
+        "y": 280,
         "wires": [
             [
                 "2c90a002.f4adf"
@@ -8498,8 +8512,7 @@
         "y": 380,
         "wires": [
             [
-                "bd132080.8f72d",
-                "40979b6e.49bc04"
+                "bd132080.8f72d"
             ]
         ]
     },
@@ -8663,7 +8676,7 @@
         "type": "function",
         "z": "d4f39d50.9849d",
         "name": "set Prev variables",
-        "func": "var haCtx = global.get(\"homeassistant\");\nvar configCtx = haCtx.homeAssistantProd;\n\nvar prevKwh = configCtx.states[\"sensor.shelly_shsw_pm_f2760d_total_consumption\"].state;\nvar prevCost = configCtx.states[\"sensor.octopus_agile_current_rate\"].state;\n\nflow.set(\"prevKwh\", parseFloat(prevKwh));\nflow.set(\"prevCost\",prevCost);\n\nmsg.prevKwh = prevKwh;\nmsg.prevCost = prevCost;\nreturn msg;",
+        "func": "var haCtx = global.get(\"homeassistant\");\n\nnode.warn(haCtx);\n\nvar configCtx = haCtx.homeAssistantProd;\n\nvar prevKwh = configCtx.states[\"sensor.shelly_shsw_pm_84cca8ab1c05_total_consumption\"].state;\nvar prevCost = configCtx.states[\"sensor.octopus_agile_current_rate\"].state;\n\nflow.set(\"prevKwh\", parseFloat(prevKwh));\nflow.set(\"prevCost\",prevCost);\n\nmsg.prevKwh = prevKwh;\nmsg.prevCost = prevCost;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -8710,10 +8723,9 @@
         "y": 440,
         "wires": [
             [
-                "37b191f5.65382e",
-                "fa289bf2.7d4278",
                 "d27f11d6.eea6c",
-                "ca58546f.5c0a68"
+                "ca58546f.5c0a68",
+                "cdb2b04b.b49f6"
             ]
         ]
     },
@@ -8822,7 +8834,7 @@
         "type": "debug",
         "z": "d4f39d50.9849d",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -8902,7 +8914,7 @@
         "type": "function",
         "z": "d4f39d50.9849d",
         "name": "calcUsagenCost",
-        "func": "var haCtx = global.get(\"homeassistant\");\nvar configCtx = haCtx.homeAssistantProd;\n\nvar newKwh = configCtx.states[\"sensor.shelly_shsw_pm_f2760d_total_consumption\"].state;\nvar newCost = configCtx.states[\"sensor.octopus_agile_current_rate\"].state;\n\nvar prevKwh = flow.get('prevKwh');\nvar prevCost = flow.get('prevCost');\n\nvar totalKwh = flow.get('totalKwh')||0.00;\nvar totalCost = flow.get('totalCost')||0.00;\n\nvar addKwh = parseFloat(newKwh) - parseFloat(prevKwh);\ntotalKwh = parseFloat(totalKwh) + addKwh;\n//totalKwh = Number(totalKwh).toFixed(2);\n\nvar addCost = parseFloat(newCost) * parseFloat(addKwh);\ntotalCost = parseFloat(totalCost) + addCost;\n//totalCost = Number(totalCost).toFixed(2);\n\nflow.set(\"prevKwh\",newKwh);\nflow.set(\"prevCost\",newCost);\nflow.set(\"totalKwh\",totalKwh);\nflow.set(\"totalCost\", totalCost)\n\nmsg.payload = \"Used so far \" + totalKwh + \"kWh\\nCost so far \" + totalCost + \"p\";\nmsg.prevKwh = prevKwh;\nmsg.prevCost = prevCost;\nmsg.addKwh = addKwh;\nmsg.addCost = addCost;\nmsg.totalKwh = totalKwh;\nmsg.totalCost = totalCost;\n\nreturn msg;",
+        "func": "var haCtx = global.get(\"homeassistant\");\nvar configCtx = haCtx.homeAssistantProd;\n\nvar newKwh = configCtx.states[\"sensor.shelly_shsw_pm_84cca8ab1c05_total_consumption\"].state;\nvar newCost = configCtx.states[\"sensor.octopus_agile_current_rate\"].state;\n\nvar prevKwh = flow.get('prevKwh');\nvar prevCost = flow.get('prevCost');\n\nvar totalKwh = flow.get('totalKwh')||0.00;\nvar totalCost = flow.get('totalCost')||0.00;\n\nvar addKwh = parseFloat(newKwh) - parseFloat(prevKwh);\ntotalKwh = parseFloat(totalKwh) + addKwh;\n//totalKwh = Number(totalKwh).toFixed(2);\n\nvar addCost = parseFloat(newCost) * parseFloat(addKwh);\ntotalCost = parseFloat(totalCost) + addCost;\n//totalCost = Number(totalCost).toFixed(2);\n\nflow.set(\"prevKwh\",newKwh);\nflow.set(\"prevCost\",newCost);\nflow.set(\"totalKwh\",totalKwh);\nflow.set(\"totalCost\", totalCost)\n\nmsg.payload = \"Used so far \" + totalKwh + \"kWh\\nCost so far \" + totalCost + \"p\";\nmsg.prevKwh = prevKwh;\nmsg.prevCost = prevCost;\nmsg.addKwh = addKwh;\nmsg.addCost = addCost;\nmsg.totalKwh = totalKwh;\nmsg.totalCost = totalCost;\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -9125,36 +9137,6 @@
         ]
     },
     {
-        "id": "fa289bf2.7d4278",
-        "type": "function",
-        "z": "d4f39d50.9849d",
-        "name": "",
-        "func": "var message = msg.payload;\n\n//var payload = \"{ \\\"content\\\" : \" + message + \", \\\"type\\\" : \\\"message\\\" , \\\"chatId\\\" : \\\"-460888439\\\"}\";\n\nvar payload = { content:message, type:\"message\",chatId:-433189292 };\n\nmsg.payload = payload;\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 1200,
-        "y": 440,
-        "wires": [
-            [
-                "c23c108f.95abf"
-            ]
-        ]
-    },
-    {
-        "id": "c23c108f.95abf",
-        "type": "telegram sender",
-        "z": "d4f39d50.9849d",
-        "name": "",
-        "bot": "a0589f1a.811e8",
-        "x": 1360,
-        "y": 440,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "eba2e2a5.6f6ee",
         "type": "change",
         "z": "d4f39d50.9849d",
@@ -9256,23 +9238,6 @@
         "wires": []
     },
     {
-        "id": "37b191f5.65382e",
-        "type": "debug",
-        "z": "d4f39d50.9849d",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1190,
-        "y": 380,
-        "wires": []
-    },
-    {
         "id": "131f8936.d70597",
         "type": "function",
         "z": "fd719e13.69936",
@@ -9287,40 +9252,10 @@
         "wires": [
             [
                 "98fde8b2.057ec8",
-                "f3ed1a16.cfb848",
                 "64ee1175.12d16",
-                "e741ef17.b37dd"
+                "e741ef17.b37dd",
+                "e7a98d0b.d1da5"
             ]
-        ]
-    },
-    {
-        "id": "f3ed1a16.cfb848",
-        "type": "function",
-        "z": "fd719e13.69936",
-        "name": "",
-        "func": "var message = msg.payload;\n\n//var payload = \"{ \\\"content\\\" : \" + message + \", \\\"type\\\" : \\\"message\\\" , \\\"chatId\\\" : \\\"-460888439\\\"}\";\n\nvar payload = { content:message, type:\"message\",chatId:-433189292 };\n\nmsg.payload = payload;\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 1240,
-        "y": 440,
-        "wires": [
-            [
-                "59412a83.24c1c4"
-            ]
-        ]
-    },
-    {
-        "id": "59412a83.24c1c4",
-        "type": "telegram sender",
-        "z": "fd719e13.69936",
-        "name": "",
-        "bot": "a0589f1a.811e8",
-        "x": 1400,
-        "y": 440,
-        "wires": [
-            []
         ]
     },
     {
@@ -9428,40 +9363,10 @@
         "wires": [
             [
                 "ed9e871c.338138",
-                "54afec7c.353754",
                 "13a75407.19886c",
-                "eb7bbf75.dfb96"
+                "eb7bbf75.dfb96",
+                "3aba1fa4.4a161"
             ]
-        ]
-    },
-    {
-        "id": "54afec7c.353754",
-        "type": "function",
-        "z": "5365d4a0.afc36c",
-        "name": "",
-        "func": "var message = msg.payload;\n\n//var payload = \"{ \\\"content\\\" : \" + message + \", \\\"type\\\" : \\\"message\\\" , \\\"chatId\\\" : \\\"-460888439\\\"}\";\n\nvar payload = { content:message, type:\"message\",chatId:-433189292 };\n\nmsg.payload = payload;\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 1180,
-        "y": 600,
-        "wires": [
-            [
-                "522e69dd.a5c1d8"
-            ]
-        ]
-    },
-    {
-        "id": "522e69dd.a5c1d8",
-        "type": "telegram sender",
-        "z": "5365d4a0.afc36c",
-        "name": "",
-        "bot": "a0589f1a.811e8",
-        "x": 1340,
-        "y": 600,
-        "wires": [
-            []
         ]
     },
     {
@@ -9918,12 +9823,12 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": false,
+        "once": true,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 150,
+        "x": 130,
         "y": 380,
         "wires": [
             [
@@ -9982,7 +9887,7 @@
         "id": "dcec1234.af68",
         "type": "comment",
         "z": "9d235989.43e7e8",
-        "name": "Set/Store Variables",
+        "name": "Update charge time",
         "info": "",
         "x": 130,
         "y": 940,
@@ -10128,7 +10033,7 @@
         "server": "a4a1abdf.7ba5b8",
         "version": 1,
         "outputs": 2,
-        "halt_if": "null",
+        "halt_if": "unknown",
         "halt_if_type": "str",
         "halt_if_compare": "is_not",
         "override_topic": false,
@@ -10145,7 +10050,9 @@
             [
                 "875d8e52.55207"
             ],
-            []
+            [
+                "ee259e2d.8e0a9"
+            ]
         ]
     },
     {
@@ -10175,8 +10082,8 @@
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nvar schedule = new Object()\nflow.set('schedule',schedule);\n\nvar ratelist = new Object()\nflow.set('rateList', ratelist);\n",
         "finalize": "",
-        "x": 640,
-        "y": 380,
+        "x": 660,
+        "y": 360,
         "wires": [
             [
                 "ee259e2d.8e0a9"
@@ -10188,13 +10095,13 @@
         "type": "file",
         "z": "9d235989.43e7e8",
         "name": "",
-        "filename": "/evcharger/schedule.json",
+        "filename": "/data/evcharger/avg_schedule.json",
         "appendNewline": true,
-        "createDir": false,
+        "createDir": true,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 790,
-        "y": 300,
+        "x": 940,
+        "y": 1960,
         "wires": [
             []
         ]
@@ -10204,7 +10111,7 @@
         "type": "function",
         "z": "9d235989.43e7e8",
         "name": "Calc charge",
-        "func": "var ratelist = flow.get('ratelist');\nvar target_time = flow.get('target_time');\nvar charge_reqd_sessions = flow.get('charge_reqd_sessions');\nvar schedule = flow.get('schedule');\n//Iterate through rate list to remove times after target\n\nvar i;\nvar curr = new Date()\nvar ratelist_short = ratelist;\n\nfor (i in ratelist) {\n  var d = new Date(i);\n  if (d >= target_time) {\n    delete ratelist_short[i];\n  } else if (d < curr) {\n    delete ratelist_short[i];\n  }\n}\n\n//Sort ratelist into cheapest > most expensive\nfunction compare(a, b) {\n  return a[1] - b[1];\n}\n\nvar array = Object.entries(ratelist_short);\narray.sort(compare);\n\n//Find number of sessions\nvar array_top = array.slice(0,charge_reqd_sessions);\n\nmsg.array_top = array_top;\n\n//Mark charging sessions as true\nfor (i in array_top) {\n    var charge_date = array_top[i][0].toString();\n    schedule[charge_date][\"charge\"] = true;\n}\n  \nmsg.schedule = schedule;\n\nflow.set('schedule',schedule);\n\nreturn msg;",
+        "func": "var ratelist = flow.get('ratelist');\nvar target_time = flow.get('target_time');\nvar charge_reqd_sessions = flow.get('charge_reqd_sessions');\nvar schedule = flow.get('schedule');\nvar schedule_avg = flow.get('schedule_avg');\n//Iterate through rate list to remove times after target\n\nvar i;\nvar curr = new Date()\nvar ratelist_short = ratelist;\nvar d_max = new Date();\n\nfor (i in ratelist) {\n  var d = new Date(i);\n  if (d >= target_time) {\n    delete ratelist_short[i];\n  } else if (d < curr) {\n    delete ratelist_short[i];\n  } else if (d > d_max) {\n      d_max = d;\n  }\n}\n\nvar target_session_start = new Date(target_time.getTime() - (30*60*1000));\n\nwhile (target_session_start > d_max) {\n\n    var d_max_new = new Date(d_max.getTime() + (30*60*1000));\n    var dmax_hr = d_max_new.getHours();\n    if (dmax_hr <10) {\n        dmax_hr = \"0\" + dmax_hr;\n    }\n    \n    var dmax_min = d_max_new.getMinutes();\n    if (dmax_min <10) {\n        dmax_min = \"0\" + dmax_min;\n    } \n    \n    var dmax_rate = schedule_avg[dmax_hr + \":\" + dmax_min]\n    \n    var diff = d_max_new - curr;\n    \n    if (diff > (24*60*60*100)) {\n        dmax_rate *= 1.1;\n    } else if (diff > (2*24*60*60*100)) {\n        dmax_rate *= 1.3;\n    }\n\n      var rate_obj = new Object();\n      rate_obj.rate = dmax_rate.toFixed(2);\n      rate_obj.charge = false;\n      schedule[d_max_new.toISOString()] = rate_obj;    \n    \n    \n    d_max = d_max_new;\n    \n}\n\n//Sort ratelist into cheapest > most expensive\nfunction compare(a, b) {\n  return a[1] - b[1];\n}\n\nvar array = Object.entries(ratelist_short);\narray.sort(compare);\n\n//Find number of sessions\nvar array_top = array.slice(0,charge_reqd_sessions);\n\nmsg.array_top = array_top;\n\n//Mark charging sessions as true\nfor (i in array_top) {\n    var charge_date = array_top[i][0].toString();\n    schedule[charge_date][\"charge\"] = true;\n}\n  \nmsg.schedule = schedule;\n\nflow.set('schedule',schedule);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -10265,7 +10172,7 @@
         "override_data": "msg",
         "blockInputOverrides": false,
         "x": 420,
-        "y": 500,
+        "y": 540,
         "wires": [
             [
                 "70a91f93.6bc53"
@@ -10278,16 +10185,17 @@
         "type": "function",
         "z": "9d235989.43e7e8",
         "name": "Capture target time",
-        "func": "var target_time_timestamp = msg.data.attributes.timestamp;\nvar d = new Date();\nvar current_time_seconds = (d.getHours()*60*60) + (d.getMinutes()*60) + d.getSeconds();\n\nif (target_time_timestamp < current_time_seconds) {\n    target_time_timestamp += (24*60*60)\n}\n\nvar target_time_milliseconds = d.getTime() - current_time_seconds*1000 + target_time_timestamp*1000\n\nvar target_time = new Date(target_time_milliseconds);\n\nflow.set('target_time',target_time);\nmsg.target_time = target_time;\n\nreturn msg;",
+        "func": "var target_time_timestamp = msg.data.attributes.timestamp*1000;\n/*var d = new Date();\nvar current_time_seconds = (d.getHours()*60*60) + (d.getMinutes()*60) + d.getSeconds();\n\nif (target_time_timestamp < current_time_seconds) {\n    target_time_timestamp += (24*60*60)\n}\n\nvar target_time_milliseconds = d.getTime() - current_time_seconds*1000 + target_time_timestamp*1000\n\nvar target_time = new Date(target_time_milliseconds);*/\n\nvar target_time = new Date(target_time_timestamp);\n\nflow.set('target_time',target_time);\nmsg.target_time = target_time;\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nvar target_time = new Date()\nflow.set('target_time',target_time);\n",
         "finalize": "",
-        "x": 710,
-        "y": 440,
+        "x": 750,
+        "y": 460,
         "wires": [
             [
-                "1a863aee.f0e2e5"
+                "ee259e2d.8e0a9",
+                "6fd7469a.fa6a58"
             ]
         ]
     },
@@ -10311,7 +10219,7 @@
         "override_data": "msg",
         "blockInputOverrides": false,
         "x": 440,
-        "y": 560,
+        "y": 600,
         "wires": [
             [
                 "e30a9193.526e"
@@ -10324,13 +10232,13 @@
         "type": "function",
         "z": "9d235989.43e7e8",
         "name": "Work out charge required",
-        "func": "var target_charge_pct = msg.target_charge;\nvar current_charge_pct = msg.current_charge;\nvar charge_reqd_pct = 0.0;\n\nif (target_charge_pct > current_charge_pct) {\n    charge_reqd_pct = target_charge_pct - current_charge_pct;\n} else {\n    charge_reqd_pct = 0;\n}\n\nvar charge_reqd_sessions = charge_reqd_pct / 7.53;\n\nvar charge_reqd_mins = Math.ceil(charge_reqd_sessions*30);\n\ncharge_reqd_sessions = Math.ceil(charge_reqd_sessions);\n\nmsg.charge_reqd_mins = charge_reqd_mins;\nmsg.charge_reqd_sessions = charge_reqd_sessions;\nmsg.charge_reqd_pct = charge_reqd_pct;\n\nflow.set('charge_reqd_pct',charge_reqd_pct);\nflow.set('charge_reqd_mins',charge_reqd_mins);\nflow.set('charge_reqd_sessions',charge_reqd_sessions);\n\nreturn msg;",
+        "func": "var target_charge_pct = msg.target_charge;\nvar current_charge_pct = msg.current_charge;\nvar charge_reqd_pct = 0.0;\n\nif (parseInt(target_charge_pct) > parseInt(current_charge_pct)) {\n    charge_reqd_pct = parseInt(target_charge_pct) - parseInt(current_charge_pct);\n    node.warn(\"Current charge is less than target\")\n} else {\n    charge_reqd_pct = 0;\n}\n\nvar charge_reqd_sessions = charge_reqd_pct / 7.53;\n\nvar charge_reqd_mins = Math.ceil(charge_reqd_sessions*30);\n\ncharge_reqd_sessions = Math.ceil(charge_reqd_sessions);\n\nmsg.charge_reqd_mins = charge_reqd_mins;\nmsg.charge_reqd_sessions = charge_reqd_sessions;\nmsg.charge_reqd_pct = charge_reqd_pct;\n\nflow.set('charge_reqd_pct',charge_reqd_pct);\nflow.set('charge_reqd_mins',charge_reqd_mins);\nflow.set('charge_reqd_sessions',charge_reqd_sessions);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nvar charge_reqd_pct;\nflow.set('charge_reqd_pct',charge_reqd_pct);\n\nvar charge_reqd_kWh;\nflow.set('charge_reqd_kWh',charge_reqd_kWh);\n\nvar charge_reqd_mins;\nflow.set('charge_reqd_mins',charge_reqd_mins);\n\nvar charge_reqd_sessions;\nflow.set('charge_reqd_sessions',charge_reqd_sessions);\n",
         "finalize": "",
         "x": 770,
-        "y": 560,
+        "y": 600,
         "wires": [
             [
                 "ee259e2d.8e0a9"
@@ -10413,137 +10321,25 @@
         "entity_location": "data",
         "override_data": "msg",
         "blockInputOverrides": false,
-        "x": 410,
-        "y": 720,
+        "x": 770,
+        "y": 660,
         "wires": [
             [],
             []
         ]
     },
     {
-        "id": "efa7b5d6.d5e128",
-        "type": "chatbot-telegram-send",
-        "z": "9d235989.43e7e8",
-        "bot": "c554ac1b.11e4",
-        "botProduction": "c554ac1b.11e4",
-        "track": false,
-        "passThrough": true,
-        "errorOutput": true,
-        "outputs": 2,
-        "x": 870,
-        "y": 860,
-        "wires": [
-            [
-                "e13e141a.be6df8"
-            ],
-            [
-                "e13e141a.be6df8"
-            ]
-        ]
-    },
-    {
-        "id": "3d601fe.7a574e",
-        "type": "inject",
-        "z": "9d235989.43e7e8",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 320,
-        "y": 860,
-        "wires": [
-            [
-                "5407bfe.bd8954"
-            ]
-        ]
-    },
-    {
-        "id": "e13e141a.be6df8",
-        "type": "debug",
-        "z": "9d235989.43e7e8",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1150,
-        "y": 860,
-        "wires": []
-    },
-    {
         "id": "238a1162.1996ce",
         "type": "chatbot-telegram-receive",
         "z": "9d235989.43e7e8",
-        "bot": "c554ac1b.11e4",
-        "botProduction": "c554ac1b.11e4",
-        "x": 270,
-        "y": 1060,
+        "bot": "61c78e43.6e203",
+        "botProduction": "61c78e43.6e203",
+        "x": 250,
+        "y": 1680,
         "wires": [
             [
-                "e656bba1.7530a8"
-            ]
-        ]
-    },
-    {
-        "id": "5407bfe.bd8954",
-        "type": "chatbot-conversation",
-        "z": "9d235989.43e7e8",
-        "name": "",
-        "botDevelopment": "c554ac1b.11e4",
-        "botProduction": "c554ac1b.11e4",
-        "chatId": "-460888439",
-        "userId": "",
-        "transport": "telegram",
-        "store": "",
-        "x": 490,
-        "y": 860,
-        "wires": [
-            [
-                "a509231c.a1a21"
-            ]
-        ]
-    },
-    {
-        "id": "a509231c.a1a21",
-        "type": "chatbot-ask",
-        "z": "9d235989.43e7e8",
-        "name": "",
-        "buttons": [
-            {
-                "type": "keyboardButton",
-                "label": "Today"
-            },
-            {
-                "type": "keyboardButton",
-                "label": "Tomorrow"
-            },
-            {
-                "type": "keyboardButton",
-                "label": "Tomorrow plus 1"
-            }
-        ],
-        "message": "Pick a date",
-        "x": 670,
-        "y": 860,
-        "wires": [
-            [
-                "efa7b5d6.d5e128"
+                "e656bba1.7530a8",
+                "234a197f.956f26"
             ]
         ]
     },
@@ -10552,15 +10348,16 @@
         "type": "debug",
         "z": "9d235989.43e7e8",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 710,
-        "y": 1060,
+        "x": 670,
+        "y": 1640,
         "wires": []
     },
     {
@@ -10574,36 +10371,34 @@
                 "command": "/charge_car"
             },
             {
+                "type": "command",
+                "command": "/changeday"
+            },
+            {
+                "type": "command",
+                "command": "/changetime"
+            },
+            {
                 "type": "catchAll"
             }
         ],
-        "outputs": 2,
-        "x": 480,
-        "y": 1120,
+        "outputs": 4,
+        "x": 430,
+        "y": 1680,
         "wires": [
             [
                 "c3fb25c6.16b4e8"
             ],
             [
-                "9413eb88.064718"
+                "b4ce2fd1.e8c6a"
+            ],
+            [
+                "d8153c9.86997c"
+            ],
+            [
+                "de948291.0fe4b"
             ]
         ]
-    },
-    {
-        "id": "9413eb88.064718",
-        "type": "debug",
-        "z": "9d235989.43e7e8",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 710,
-        "y": 1100,
-        "wires": []
     },
     {
         "id": "ee259e2d.8e0a9",
@@ -10624,13 +10419,1606 @@
         "firstMsg": "true",
         "mapPayload": "false",
         "disableComplete": false,
-        "x": 920,
-        "y": 440,
+        "x": 940,
+        "y": 380,
         "wires": [
             [
                 "bb22b434.6d70a8"
             ],
             []
         ]
+    },
+    {
+        "id": "71e96321.1f073c",
+        "type": "comment",
+        "z": "9d235989.43e7e8",
+        "name": "Telegram",
+        "info": "",
+        "x": 100,
+        "y": 1500,
+        "wires": []
+    },
+    {
+        "id": "6fd7469a.fa6a58",
+        "type": "link out",
+        "z": "9d235989.43e7e8",
+        "name": "Update Est. Charge Time",
+        "links": [
+            "c3a8b1b6.23c14"
+        ],
+        "x": 935,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "8d14a455.b4c6c8",
+        "type": "ha-time",
+        "z": "9d235989.43e7e8",
+        "server": "a4a1abdf.7ba5b8",
+        "name": "",
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityId": "input_datetime.ev_charged_time",
+        "property": "state",
+        "offset": 0,
+        "offsetType": "num",
+        "offsetUnits": "minutes",
+        "randomOffset": false,
+        "repeatDaily": false,
+        "payload": "$entity().state",
+        "payloadType": "jsonata",
+        "debugenabled": true,
+        "x": 170,
+        "y": 980,
+        "wires": [
+            [
+                "48b484f9.646acc"
+            ]
+        ]
+    },
+    {
+        "id": "6eb3520f.e55b6c",
+        "type": "api-call-service",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "input_datetime",
+        "service": "set_datetime",
+        "entityId": "input_datetime.ev_charged_time",
+        "data": "{    \"timestamp\" : {{payload}}}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1060,
+        "y": 980,
+        "wires": [
+            [
+                "593ea6a9.084068"
+            ]
+        ]
+    },
+    {
+        "id": "897ab5e6.eb3338",
+        "type": "function",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "func": "var d_timestamp_s = msg.data.attributes.timestamp + msg.timeadjust;\nvar d_date = new Date(d_timestamp_s*1000);\n\nmsg.clear;\nmsg.payload = d_timestamp_s;\n\nmsg.message = \"EV Charge updated to \" + d_date.toDateString() + \" @ \" + d_date.getHours() + \":\" + d_date.getMinutes() + \"0\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 780,
+        "y": 980,
+        "wires": [
+            [
+                "6eb3520f.e55b6c"
+            ]
+        ]
+    },
+    {
+        "id": "48b484f9.646acc",
+        "type": "change",
+        "z": "9d235989.43e7e8",
+        "name": "Add a day",
+        "rules": [
+            {
+                "t": "set",
+                "p": "timeadjust",
+                "pt": "msg",
+                "to": "86400",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 980,
+        "wires": [
+            [
+                "897ab5e6.eb3338"
+            ]
+        ]
+    },
+    {
+        "id": "49ba7f74.39712",
+        "type": "chatbot-conversation",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "botDevelopment": "c554ac1b.11e4",
+        "botProduction": "c554ac1b.11e4",
+        "chatId": "-421910568",
+        "userId": "",
+        "transport": "telegram",
+        "store": "",
+        "x": 890,
+        "y": 1040,
+        "wires": [
+            [
+                "ace99cf8.9ecb"
+            ]
+        ]
+    },
+    {
+        "id": "7cce377.1cbf3c8",
+        "type": "inject",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 1040,
+        "wires": [
+            [
+                "162534e5.76b07b"
+            ]
+        ]
+    },
+    {
+        "id": "162534e5.76b07b",
+        "type": "api-current-state",
+        "z": "9d235989.43e7e8",
+        "name": "test",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "null",
+        "halt_if_type": "str",
+        "halt_if_compare": "is_not",
+        "override_topic": false,
+        "entity_id": "input_datetime.ev_charged_time",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 290,
+        "y": 1040,
+        "wires": [
+            [
+                "48b484f9.646acc"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "593ea6a9.084068",
+        "type": "change",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "message",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 560,
+        "y": 1040,
+        "wires": [
+            [
+                "49ba7f74.39712"
+            ]
+        ]
+    },
+    {
+        "id": "d8153c9.86997c",
+        "type": "link out",
+        "z": "9d235989.43e7e8",
+        "name": "/changeday",
+        "links": [
+            "4b6fd784.b0a178"
+        ],
+        "x": 635,
+        "y": 1760,
+        "wires": []
+    },
+    {
+        "id": "828b9ce5.8e268",
+        "type": "link in",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "links": [
+            "b4ce2fd1.e8c6a"
+        ],
+        "x": 95,
+        "y": 1180,
+        "wires": [
+            [
+                "b23bfc1a.33abb"
+            ]
+        ]
+    },
+    {
+        "id": "51d81879.ff1478",
+        "type": "chatbot-telegram-send",
+        "z": "9d235989.43e7e8",
+        "bot": "61c78e43.6e203",
+        "botProduction": "c554ac1b.11e4",
+        "track": true,
+        "passThrough": false,
+        "errorOutput": true,
+        "outputs": 2,
+        "x": 450,
+        "y": 1180,
+        "wires": [
+            [
+                "cb2ecb6e.3320e8",
+                "ebcbd75b.e3faa8"
+            ],
+            [
+                "ebcbd75b.e3faa8"
+            ]
+        ]
+    },
+    {
+        "id": "cb2ecb6e.3320e8",
+        "type": "switch",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "property": "payload.content",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 650,
+        "y": 1180,
+        "wires": [
+            [
+                "97d07095.cd714"
+            ],
+            [
+                "e74cf4c0.892d28"
+            ],
+            [
+                "8cfe3024.3e304"
+            ],
+            [
+                "1d39e349.2fde5d"
+            ]
+        ]
+    },
+    {
+        "id": "97d07095.cd714",
+        "type": "change",
+        "z": "9d235989.43e7e8",
+        "name": "today",
+        "rules": [
+            {
+                "t": "set",
+                "p": "date",
+                "pt": "msg",
+                "to": "{\t    \"date\": $fromMillis($millis(), '[Y0001]-[M01]-[D01]')\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 790,
+        "y": 1120,
+        "wires": [
+            [
+                "6900e7cb.f0aaa8"
+            ]
+        ]
+    },
+    {
+        "id": "e74cf4c0.892d28",
+        "type": "change",
+        "z": "9d235989.43e7e8",
+        "name": "tomorrow",
+        "rules": [
+            {
+                "t": "set",
+                "p": "date",
+                "pt": "msg",
+                "to": "{ \"date\":$fromMillis($millis()+86400000, '[Y0001]-[M01]-[D01]')}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 1160,
+        "wires": [
+            [
+                "6900e7cb.f0aaa8"
+            ]
+        ]
+    },
+    {
+        "id": "8cfe3024.3e304",
+        "type": "change",
+        "z": "9d235989.43e7e8",
+        "name": "+ 2 days",
+        "rules": [
+            {
+                "t": "set",
+                "p": "date",
+                "pt": "msg",
+                "to": "{\t    \"date\": $fromMillis($millis()+172800000, '[Y0001]-[M01]-[D01]')\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 1200,
+        "wires": [
+            [
+                "6900e7cb.f0aaa8"
+            ]
+        ]
+    },
+    {
+        "id": "1d39e349.2fde5d",
+        "type": "change",
+        "z": "9d235989.43e7e8",
+        "name": "+ 3 days",
+        "rules": [
+            {
+                "t": "set",
+                "p": "date",
+                "pt": "msg",
+                "to": "{\t    \"date\": $fromMillis($millis()+259200000, '[Y0001]-[M01]-[D01]')\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 1240,
+        "wires": [
+            [
+                "6900e7cb.f0aaa8"
+            ]
+        ]
+    },
+    {
+        "id": "6900e7cb.f0aaa8",
+        "type": "change",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "date.date",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1000,
+        "y": 1160,
+        "wires": [
+            [
+                "83d09d6d.32c33"
+            ]
+        ]
+    },
+    {
+        "id": "83d09d6d.32c33",
+        "type": "api-call-service",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "input_datetime",
+        "service": "set_datetime",
+        "entityId": "input_datetime.ev_charged_time",
+        "data": "{\"date\":\"{{payload}}\"}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1260,
+        "y": 1160,
+        "wires": [
+            [
+                "afc2cbab.341178"
+            ]
+        ]
+    },
+    {
+        "id": "de948291.0fe4b",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 1820,
+        "wires": []
+    },
+    {
+        "id": "ec17dee5.dd11f",
+        "type": "inject",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 640,
+        "y": 1240,
+        "wires": [
+            [
+                "1d39e349.2fde5d"
+            ]
+        ]
+    },
+    {
+        "id": "40825ee3.c3cff",
+        "type": "inject",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 640,
+        "y": 1120,
+        "wires": [
+            [
+                "97d07095.cd714"
+            ]
+        ]
+    },
+    {
+        "id": "4b6fd784.b0a178",
+        "type": "link in",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "links": [
+            "d8153c9.86997c"
+        ],
+        "x": 95,
+        "y": 1380,
+        "wires": [
+            [
+                "b1c2125e.204fe"
+            ]
+        ]
+    },
+    {
+        "id": "60590322.92e0bc",
+        "type": "chatbot-telegram-send",
+        "z": "9d235989.43e7e8",
+        "bot": "61c78e43.6e203",
+        "botProduction": "61c78e43.6e203",
+        "track": true,
+        "passThrough": false,
+        "errorOutput": true,
+        "outputs": 2,
+        "x": 450,
+        "y": 1380,
+        "wires": [
+            [
+                "f4190a6.eabecf8",
+                "3b31eb06.6b4744"
+            ],
+            [
+                "f4190a6.eabecf8"
+            ]
+        ]
+    },
+    {
+        "id": "3b31eb06.6b4744",
+        "type": "change",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.content",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 820,
+        "y": 1380,
+        "wires": [
+            [
+                "a0acf18c.9fbce",
+                "af61fcc.92f09"
+            ]
+        ]
+    },
+    {
+        "id": "a0acf18c.9fbce",
+        "type": "api-call-service",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "input_datetime",
+        "service": "set_datetime",
+        "entityId": "input_datetime.ev_charged_time",
+        "data": "{\"time\":\"{{payload}}\"}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1260,
+        "y": 1360,
+        "wires": [
+            [
+                "afc2cbab.341178"
+            ]
+        ]
+    },
+    {
+        "id": "b4ce2fd1.e8c6a",
+        "type": "link out",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "links": [
+            "828b9ce5.8e268"
+        ],
+        "x": 645,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "1a9adc23.f08d44",
+        "type": "link in",
+        "z": "9d235989.43e7e8",
+        "name": "EV Date/Time Updated",
+        "links": [
+            "97d41610.f76118",
+            "a8ced89d.47d098",
+            "620d4d4d.992fa4"
+        ],
+        "x": 735,
+        "y": 1060,
+        "wires": [
+            [
+                "49ba7f74.39712"
+            ]
+        ]
+    },
+    {
+        "id": "afc2cbab.341178",
+        "type": "api-current-state",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "null",
+        "halt_if_type": "str",
+        "halt_if_compare": "is_not",
+        "override_topic": false,
+        "entity_id": "input_datetime.ev_charged_time",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 1600,
+        "y": 1280,
+        "wires": [
+            [
+                "376e2d2a.a0c0e2"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "376e2d2a.a0c0e2",
+        "type": "function",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "func": "var d_timestamp_s = msg.data.attributes.timestamp;\nvar d_date = new Date(d_timestamp_s*1000);\n\nmsg.payload = \"EV Charge updated to \" + d_date.toDateString() + \" @ \" + d_date.getHours() + \":\" + d_date.getMinutes() + \"0\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1880,
+        "y": 1280,
+        "wires": [
+            [
+                "620d4d4d.992fa4"
+            ]
+        ]
+    },
+    {
+        "id": "620d4d4d.992fa4",
+        "type": "link out",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "links": [
+            "1a9adc23.f08d44"
+        ],
+        "x": 1975,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "a468c38c.9c7be",
+        "type": "chatbot-telegram-send",
+        "z": "9d235989.43e7e8",
+        "bot": "61c78e43.6e203",
+        "botProduction": "61c78e43.6e203",
+        "track": false,
+        "passThrough": false,
+        "errorOutput": true,
+        "outputs": 1,
+        "x": 1350,
+        "y": 1040,
+        "wires": [
+            [
+                "afbf5366.c91a8"
+            ]
+        ]
+    },
+    {
+        "id": "ace99cf8.9ecb",
+        "type": "chatbot-inline-buttons",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "buttons": [
+            {
+                "type": "postback",
+                "label": "Change Day",
+                "value": "/changeday",
+                "answer": "",
+                "alert": false,
+                "style": ""
+            },
+            {
+                "type": "postback",
+                "label": "Change Time",
+                "value": "/changetime",
+                "answer": "",
+                "alert": false,
+                "style": ""
+            }
+        ],
+        "message": "{{payload}}",
+        "x": 1140,
+        "y": 1040,
+        "wires": [
+            [
+                "a468c38c.9c7be",
+                "afbf5366.c91a8"
+            ]
+        ]
+    },
+    {
+        "id": "afbf5366.c91a8",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1550,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "b23bfc1a.33abb",
+        "type": "chatbot-inline-buttons",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "buttons": [
+            {
+                "type": "postback",
+                "label": "Today",
+                "value": "0",
+                "answer": "",
+                "alert": false,
+                "style": ""
+            },
+            {
+                "type": "postback",
+                "label": "Tomorrow",
+                "value": "1",
+                "answer": "",
+                "alert": false,
+                "style": ""
+            },
+            {
+                "type": "postback",
+                "label": "+ 2 days",
+                "value": "2",
+                "answer": "",
+                "alert": false,
+                "style": ""
+            },
+            {
+                "type": "postback",
+                "label": "+ 3 days",
+                "value": "3",
+                "answer": "",
+                "alert": false,
+                "style": ""
+            }
+        ],
+        "message": "What day do you want the car charged?",
+        "x": 240,
+        "y": 1180,
+        "wires": [
+            [
+                "51d81879.ff1478"
+            ]
+        ]
+    },
+    {
+        "id": "b1c2125e.204fe",
+        "type": "chatbot-inline-buttons",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "buttons": [
+            {
+                "type": "postback",
+                "label": "04:00",
+                "value": "04:00:00",
+                "answer": "",
+                "alert": true,
+                "style": ""
+            },
+            {
+                "type": "postback",
+                "label": "06:00",
+                "value": "06:00:00",
+                "answer": "",
+                "alert": false,
+                "style": ""
+            },
+            {
+                "type": "postback",
+                "label": "10:00",
+                "value": "10:00:00",
+                "answer": "",
+                "alert": false,
+                "style": ""
+            },
+            {
+                "type": "postback",
+                "label": "17:00",
+                "value": "17:00:00",
+                "answer": "",
+                "alert": false,
+                "style": ""
+            }
+        ],
+        "message": "What time do you want the car charged?",
+        "x": 240,
+        "y": 1380,
+        "wires": [
+            [
+                "60590322.92e0bc"
+            ]
+        ]
+    },
+    {
+        "id": "f4190a6.eabecf8",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 1500,
+        "wires": []
+    },
+    {
+        "id": "234a197f.956f26",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 410,
+        "y": 1760,
+        "wires": []
+    },
+    {
+        "id": "af61fcc.92f09",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "b470df5e.7b471",
+        "type": "catch",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 650,
+        "y": 860,
+        "wires": [
+            [
+                "bcc23a22.dec378"
+            ]
+        ]
+    },
+    {
+        "id": "bcc23a22.dec378",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "39012d9e.319c82",
+        "type": "function",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "func": "var chat = msg.chat();\nvar messageId = chat.get('messageId');\nvar chatId = chat.get('chatId');\nvar message = chat.get('message');\n\ndelete msg.payload.buttons;\n\nmsg.payload = {    \n  chatId: chatId,    \n  messageId: messageId,\n  buttons: [{ type: 'postback', value: 'clicked', label: 'Clicked!' }],\n  content: message\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 620,
+        "y": 1300,
+        "wires": [
+            [
+                "96f31880.9b4018",
+                "745df0f8.c7226"
+            ]
+        ]
+    },
+    {
+        "id": "707fae08.c0616",
+        "type": "chatbot-telegram-send",
+        "z": "9d235989.43e7e8",
+        "bot": "61c78e43.6e203",
+        "botProduction": "61c78e43.6e203",
+        "track": true,
+        "passThrough": false,
+        "errorOutput": true,
+        "outputs": 2,
+        "x": 1050,
+        "y": 1280,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "745df0f8.c7226",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1190,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "96f31880.9b4018",
+        "type": "chatbot-conversation",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "botDevelopment": "61c78e43.6e203",
+        "botProduction": "61c78e43.6e203",
+        "chatId": "",
+        "userId": "",
+        "transport": "telegram",
+        "store": "",
+        "x": 790,
+        "y": 1300,
+        "wires": [
+            [
+                "29bc65c3.99ceba"
+            ]
+        ]
+    },
+    {
+        "id": "29bc65c3.99ceba",
+        "type": "chatbot-inline-buttons",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "buttons": [],
+        "message": "",
+        "x": 920,
+        "y": 1340,
+        "wires": [
+            [
+                "707fae08.c0616"
+            ]
+        ]
+    },
+    {
+        "id": "99df7bc4.95fee8",
+        "type": "comment",
+        "z": "9d235989.43e7e8",
+        "name": "Not used",
+        "info": "",
+        "x": 580,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "ebcbd75b.e3faa8",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 410,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "e4885b83.11ae38",
+        "type": "inject",
+        "z": "d4f39d50.9849d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1270,
+        "y": 580,
+        "wires": [
+            [
+                "bf4283d7.698a6"
+            ]
+        ]
+    },
+    {
+        "id": "bf4283d7.698a6",
+        "type": "file in",
+        "z": "d4f39d50.9849d",
+        "name": "",
+        "filename": "/data/dishwasherDB.csv",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 1480,
+        "y": 580,
+        "wires": [
+            [
+                "7850d89.0e0e528"
+            ]
+        ]
+    },
+    {
+        "id": "7850d89.0e0e528",
+        "type": "debug",
+        "z": "d4f39d50.9849d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1610,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "cdb2b04b.b49f6",
+        "type": "chatbot-conversation",
+        "z": "d4f39d50.9849d",
+        "name": "",
+        "botDevelopment": "c554ac1b.11e4",
+        "botProduction": "c554ac1b.11e4",
+        "chatId": "-433189292",
+        "userId": "",
+        "transport": "telegram",
+        "store": "",
+        "x": 1370,
+        "y": 260,
+        "wires": [
+            [
+                "f2067020.d73dc"
+            ]
+        ]
+    },
+    {
+        "id": "bbfd9b2d.8643e8",
+        "type": "chatbot-telegram-send",
+        "z": "d4f39d50.9849d",
+        "bot": "61c78e43.6e203",
+        "botProduction": "61c78e43.6e203",
+        "track": false,
+        "passThrough": false,
+        "errorOutput": true,
+        "outputs": 1,
+        "x": 1710,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e1449065.0edf2",
+        "type": "catch",
+        "z": "d4f39d50.9849d",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 850,
+        "y": 100,
+        "wires": [
+            [
+                "3c69b284.2e696e"
+            ]
+        ]
+    },
+    {
+        "id": "f2067020.d73dc",
+        "type": "chatbot-message",
+        "z": "d4f39d50.9849d",
+        "name": "",
+        "message": [
+            {
+                "message": "{{payload}}"
+            }
+        ],
+        "language": "none",
+        "x": 1510,
+        "y": 260,
+        "wires": [
+            [
+                "bbfd9b2d.8643e8"
+            ]
+        ]
+    },
+    {
+        "id": "e7a98d0b.d1da5",
+        "type": "chatbot-conversation",
+        "z": "fd719e13.69936",
+        "name": "",
+        "botDevelopment": "c554ac1b.11e4",
+        "botProduction": "c554ac1b.11e4",
+        "chatId": "-433189292",
+        "userId": "",
+        "transport": "telegram",
+        "store": "",
+        "x": 1250,
+        "y": 260,
+        "wires": [
+            [
+                "c98bc8cc.669a58"
+            ]
+        ]
+    },
+    {
+        "id": "483a010e.81114",
+        "type": "chatbot-telegram-send",
+        "z": "fd719e13.69936",
+        "bot": "61c78e43.6e203",
+        "botProduction": "61c78e43.6e203",
+        "track": false,
+        "passThrough": false,
+        "errorOutput": true,
+        "outputs": 1,
+        "x": 1590,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c98bc8cc.669a58",
+        "type": "chatbot-message",
+        "z": "fd719e13.69936",
+        "name": "",
+        "message": [
+            {
+                "message": "{{payload}}"
+            }
+        ],
+        "language": "none",
+        "x": 1390,
+        "y": 260,
+        "wires": [
+            [
+                "483a010e.81114"
+            ]
+        ]
+    },
+    {
+        "id": "3aba1fa4.4a161",
+        "type": "chatbot-conversation",
+        "z": "5365d4a0.afc36c",
+        "name": "",
+        "botDevelopment": "c554ac1b.11e4",
+        "botProduction": "c554ac1b.11e4",
+        "chatId": "-433189292",
+        "userId": "",
+        "transport": "telegram",
+        "store": "",
+        "x": 1190,
+        "y": 420,
+        "wires": [
+            [
+                "d243627d.52365"
+            ]
+        ]
+    },
+    {
+        "id": "d66b375f.f749a8",
+        "type": "chatbot-telegram-send",
+        "z": "5365d4a0.afc36c",
+        "bot": "61c78e43.6e203",
+        "botProduction": "61c78e43.6e203",
+        "track": false,
+        "passThrough": false,
+        "errorOutput": true,
+        "outputs": 1,
+        "x": 1530,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d243627d.52365",
+        "type": "chatbot-message",
+        "z": "5365d4a0.afc36c",
+        "name": "",
+        "message": [
+            {
+                "message": "{{payload}}"
+            }
+        ],
+        "language": "none",
+        "x": 1330,
+        "y": 420,
+        "wires": [
+            [
+                "d66b375f.f749a8"
+            ]
+        ]
+    },
+    {
+        "id": "46451bbb.1225d4",
+        "type": "poll-state",
+        "z": "9d235989.43e7e8",
+        "name": "If charged time is in the past",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "updateinterval": "20",
+        "updateIntervalUnits": "minutes",
+        "outputinitially": false,
+        "outputonchanged": false,
+        "entity_id": "input_datetime.ev_charged_time",
+        "state_type": "str",
+        "halt_if": "$now()",
+        "halt_if_type": "jsonata",
+        "halt_if_compare": "lt",
+        "outputs": 2,
+        "x": 160,
+        "y": 880,
+        "wires": [
+            [
+                "48b484f9.646acc"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "df4d4169.ad831",
+        "type": "influxdb in",
+        "z": "9d235989.43e7e8",
+        "influxdb": "d4f057b1.bf3418",
+        "name": "",
+        "query": "SELECT mean(\"agile_rate\") AS \"mean_agile_rate\" FROM \"energy\".\"autogen\".\"electricity\" WHERE time >= now()-30d AND time <= now() GROUP BY \"time_of_day\"\n",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 400,
+        "y": 1960,
+        "wires": [
+            [
+                "9e7d51fb.955b3"
+            ]
+        ]
+    },
+    {
+        "id": "7925b6a5.91ae58",
+        "type": "inject",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1800",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 1940,
+        "wires": [
+            [
+                "df4d4169.ad831"
+            ]
+        ]
+    },
+    {
+        "id": "be491892.3566d8",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 450,
+        "y": 2040,
+        "wires": []
+    },
+    {
+        "id": "374f44cc.931d5c",
+        "type": "inject",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 970,
+        "y": 520,
+        "wires": [
+            [
+                "bb22b434.6d70a8"
+            ]
+        ]
+    },
+    {
+        "id": "9e7d51fb.955b3",
+        "type": "function",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "func": "var i;\nvar schedule_avg = new Object();\n\nfor (i in msg.payload) {\n    if (msg.payload[i].time_of_day) {\n\n   // node.warn(i + \" \" + msg.payload[i].time_of_day)\n    schedule_avg[msg.payload[i].time_of_day] = msg.payload[i].mean_agile_rate.toFixed(2);\n    }\n}\n\n///WORKAROUND FOR MIDNIGHT\nschedule_avg['00:00'] = schedule_avg['00:30'];\n\nflow.set('schedule_avg',schedule_avg);\n\nmsg.payload = schedule_avg;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 670,
+        "y": 1960,
+        "wires": [
+            [
+                "be491892.3566d8",
+                "f7ccd97c.f43d68"
+            ]
+        ]
+    },
+    {
+        "id": "aa0f156b.2d18f8",
+        "type": "inject",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 500,
+        "wires": [
+            [
+                "1a863aee.f0e2e5"
+            ]
+        ]
+    },
+    {
+        "id": "ed238594.ee6fe8",
+        "type": "complete",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "scope": [
+            "875d8e52.55207"
+        ],
+        "uncaught": false,
+        "x": 230,
+        "y": 780,
+        "wires": [
+            [
+                "fc385600.193b08"
+            ]
+        ]
+    },
+    {
+        "id": "f94dd7b5.c32038",
+        "type": "file",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "filename": "/data/evcharger/curr_schedule.json",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 660,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fc385600.193b08",
+        "type": "change",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "schedule",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 780,
+        "wires": [
+            [
+                "f94dd7b5.c32038"
+            ]
+        ]
+    },
+    {
+        "id": "25474bb7.413174",
+        "type": "comment",
+        "z": "9d235989.43e7e8",
+        "name": "Save Schedule Object",
+        "info": "",
+        "x": 120,
+        "y": 740,
+        "wires": []
     }
 ]
