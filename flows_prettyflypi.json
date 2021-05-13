@@ -147,6 +147,13 @@
         "info": ""
     },
     {
+        "id": "48de1172.3e9a5",
+        "type": "tab",
+        "label": "neo4j",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "5012390b.b0f3b",
         "type": "subflow",
         "name": "Set Starting Variables",
@@ -494,6 +501,14 @@
         "id": "6d6945d1.0256fc",
         "type": "tesla-config",
         "vehicleID": "40165962968140240"
+    },
+    {
+        "id": "c3c0e055.d0b5b",
+        "type": "neo4j-bolt-server",
+        "name": "",
+        "url": "bolt://192.168.1.6:7687",
+        "user": "neo4j",
+        "pass": "test"
     },
     {
         "id": "966c07b8.c25848",
@@ -7426,9 +7441,13 @@
         "z": "7d5e0229.53f9e4",
         "name": "",
         "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "debugenabled": false,
         "service_domain": "image_processing",
         "service": "scan",
-        "data": "{\"entity_id\":\"image_processing.drive_image_recogntion\"}",
+        "entityId": "image_processing.drive_image_recogntion",
+        "data": "",
+        "dataType": "json",
         "mergecontext": "",
         "output_location": "",
         "output_location_type": "none",
@@ -7447,7 +7466,7 @@
         "z": "7d5e0229.53f9e4",
         "name": "",
         "server": "a4a1abdf.7ba5b8",
-        "version": "1",
+        "version": 1,
         "debugenabled": false,
         "service_domain": "image_processing",
         "service": "scan",
@@ -7472,9 +7491,13 @@
         "z": "7d5e0229.53f9e4",
         "name": "",
         "server": "a4a1abdf.7ba5b8",
+        "version": "1",
+        "debugenabled": false,
         "service_domain": "image_processing",
         "service": "scan",
-        "data": "{\"entity_id\":\"image_processing.garden_image_recognition\"}",
+        "entityId": "image_processing.garden_image_recognition",
+        "data": "",
+        "dataType": "json",
         "mergecontext": "",
         "output_location": "",
         "output_location_type": "none",
@@ -9672,12 +9695,12 @@
         "repeat": "60",
         "crontab": "",
         "once": true,
-        "onceDelay": 0.1,
+        "onceDelay": "1",
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 130,
-        "y": 380,
+        "x": 90,
+        "y": 60,
         "wires": [
             [
                 "19427381.656fcc"
@@ -9690,8 +9713,8 @@
         "z": "9d235989.43e7e8",
         "name": "Build Schedule Object",
         "info": "",
-        "x": 150,
-        "y": 340,
+        "x": 120,
+        "y": 20,
         "wires": []
     },
     {
@@ -9700,18 +9723,18 @@
         "z": "9d235989.43e7e8",
         "name": "CHARGING TRIGGER",
         "info": "",
-        "x": 120,
-        "y": 2060,
+        "x": 140,
+        "y": 1560,
         "wires": []
     },
     {
         "id": "dcec1234.af68",
         "type": "comment",
         "z": "9d235989.43e7e8",
-        "name": "Update charge time",
+        "name": "Update charge time on expiry",
         "info": "",
-        "x": 130,
-        "y": 940,
+        "x": 140,
+        "y": 460,
         "wires": []
     },
     {
@@ -9723,8 +9746,8 @@
         "qos": "2",
         "datatype": "auto",
         "broker": "b113ebbe.a57308",
-        "x": 1170,
-        "y": 600,
+        "x": 1990,
+        "y": 260,
         "wires": [
             [
                 "6a393c56.3e3054"
@@ -9736,15 +9759,15 @@
         "type": "debug",
         "z": "9d235989.43e7e8",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1450,
-        "y": 600,
+        "x": 2270,
+        "y": 260,
         "wires": []
     },
     {
@@ -9759,8 +9782,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1370,
-        "y": 680,
+        "x": 2290,
+        "y": 300,
         "wires": []
     },
     {
@@ -9772,11 +9795,12 @@
         "qos": "2",
         "datatype": "auto",
         "broker": "b113ebbe.a57308",
-        "x": 1210,
-        "y": 680,
+        "x": 2030,
+        "y": 340,
         "wires": [
             [
-                "8838aa38.24c5c8"
+                "8838aa38.24c5c8",
+                "d4db7e81.f23d8"
             ]
         ]
     },
@@ -9784,7 +9808,7 @@
         "id": "19427381.656fcc",
         "type": "api-current-state",
         "z": "9d235989.43e7e8",
-        "name": "",
+        "name": "rates",
         "server": "a4a1abdf.7ba5b8",
         "version": 1,
         "outputs": 2,
@@ -9799,8 +9823,8 @@
         "entity_location": "data",
         "override_data": "msg",
         "blockInputOverrides": false,
-        "x": 480,
-        "y": 320,
+        "x": 370,
+        "y": 140,
         "wires": [
             [
                 "875d8e52.55207"
@@ -9821,9 +9845,10 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1150,
-        "y": 360,
-        "wires": []
+        "x": 1155,
+        "y": 220,
+        "wires": [],
+        "l": false
     },
     {
         "id": "875d8e52.55207",
@@ -9835,8 +9860,8 @@
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nvar schedule = new Object()\nflow.set('schedule',schedule);\n\nvar ratelist = new Object()\nflow.set('rateList', ratelist);\n",
         "finalize": "",
-        "x": 800,
-        "y": 320,
+        "x": 540,
+        "y": 140,
         "wires": [
             [
                 "f682f5be.63caf8"
@@ -9853,8 +9878,8 @@
         "createDir": true,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 275,
-        "y": 1960,
+        "x": 1615,
+        "y": 380,
         "wires": [
             []
         ],
@@ -9865,13 +9890,13 @@
         "type": "function",
         "z": "9d235989.43e7e8",
         "name": "Calc charge",
-        "func": "var ratelist = flow.get('ratelist');\nvar target_time = flow.get('target_time');\nvar charge_reqd_sessions = flow.get('charge_reqd_sessions');\nvar schedule = flow.get('schedule');\nvar schedule_avg = flow.get('schedule_avg');\n//Iterate through rate list to remove times after target\n\nvar i;\nvar curr = new Date()\nvar ratelist_short = ratelist;\nvar d_max = new Date();\n\nfor (i in ratelist) {\n  var d = new Date(i);\n  if (d >= target_time) {\n    delete ratelist_short[i];\n  } else if (d < (curr-(30*60*1000))) {\n    delete ratelist_short[i];\n  } else if (d > d_max) {\n      d_max = d;\n  }\n}\n\nvar target_session_start = new Date(target_time.getTime() - (30*60*1000));\n\nwhile (target_session_start > d_max) {\n\n    var d_max_new = new Date(d_max.getTime() + (30*60*1000));\n    var dmax_hr = d_max_new.getHours();\n    if (dmax_hr <10) {\n        dmax_hr = \"0\" + dmax_hr;\n    }\n    \n    var dmax_min = d_max_new.getMinutes();\n    if (dmax_min <10) {\n        dmax_min = \"0\" + dmax_min;\n    } \n    \n    var dmax_rate = schedule_avg[dmax_hr + \":\" + dmax_min]\n    \n    var diff = d_max_new - curr;\n    \n    if (diff > (24*60*60*100)) {\n        dmax_rate *= 1.1;\n    } else if (diff > (2*24*60*60*100)) {\n        dmax_rate *= 1.3;\n    }\n\n      var rate_obj = new Object();\n      rate_obj.rate = dmax_rate.toFixed(2);\n      rate_obj.charge = false;\n      schedule[d_max_new.toISOString().replace('00.000Z', '00Z')] = rate_obj;    \n    \n    \n    d_max = d_max_new;\n    \n}\n\n//Sort ratelist into cheapest > most expensive\nfunction compare(a, b) {\n  return a[1] - b[1];\n}\n\nvar array = Object.entries(ratelist_short);\narray.sort(compare);\n\n//Find number of sessions\nvar array_top = array.slice(0,charge_reqd_sessions);\n\nmsg.array_top = array_top;\n\nvar next_charge = d_max;\n\nif(array_top.length == 0) {\n    next_charge = \"none\";\n} \n//Mark charging sessions as true\nfor (i in array_top) {\n    var charge_date = array_top[i][0].toString();\n    schedule[charge_date][\"charge\"] = true;\n    if (Date.parse(array_top[i][0]) < next_charge) {\n        next_charge = array_top[i][0];\n    }\n}\nmsg.next_charge = next_charge;\nflow.set('next_charge',next_charge);\n\nmsg.schedule = schedule;\nflow.set('schedule',schedule);\n\nreturn msg;",
+        "func": "var ratelist = flow.get('ratelist');\nvar target_time = flow.get('target_time');\nvar charge_reqd_sessions = flow.get('charge_reqd_sessions');\nvar schedule = flow.get('schedule');\nvar schedule_avg = flow.get('schedule_avg');\n//Iterate through rate list to remove times after target\n\nvar i;\nvar curr = new Date()\nvar ratelist_short = ratelist;\nvar d_max = new Date();\n\nfor (i in ratelist) {\n  var d = new Date(i);\n  if (d >= target_time) {\n    delete ratelist_short[i];\n  } else if (d < (curr-(30*60*1000))) {\n    delete ratelist_short[i];\n  } else if (d > d_max) {\n      d_max = d;\n  }\n}\n\nvar target_session_start = new Date(target_time.getTime() - (30*60*1000));\n\nwhile (target_session_start > d_max) {\n\n    var d_max_new = new Date(d_max.getTime() + (30*60*1000));\n    var dmax_hr = d_max_new.getHours();\n    if (dmax_hr <10) {\n        dmax_hr = \"0\" + dmax_hr;\n    }\n    \n    var dmax_min = d_max_new.getMinutes();\n    if (dmax_min <10) {\n        dmax_min = \"0\" + dmax_min;\n    } \n    \n    var dmax_rate = schedule_avg[dmax_hr + \":\" + dmax_min]\n    \n    var diff = d_max_new - curr;\n    \n    if (diff > (24*60*60*100)) {\n        dmax_rate *= 1.1;\n    } else if (diff > (2*24*60*60*100)) {\n        dmax_rate *= 1.3;\n    }\n\n      var rate_obj = new Object();\n      rate_obj.rate = dmax_rate.toFixed(2);\n      rate_obj.charge = false;\n      schedule[d_max_new.toISOString().replace('00.000Z', '00Z')] = rate_obj;    \n    \n    \n    d_max = d_max_new;\n    \n}\n\n//Sort ratelist into cheapest > most expensive\nfunction compare(a, b) {\n  return a[1] - b[1];\n}\n\nvar array = Object.entries(ratelist_short);\narray.sort(compare);\n\n//Find number of sessions\nvar array_top = array.slice(0,charge_reqd_sessions);\n\nmsg.array_top = array_top;\n\nvar next_charge = d_max;\n\nif(array_top.length == 0) {\n    next_charge = new Date(curr.getTime() + (7*24*60*60*1000));\n} \n//Mark charging sessions as true\nfor (i in array_top) {\n    var charge_date = array_top[i][0].toString();\n    schedule[charge_date][\"charge\"] = true;\n    if (Date.parse(array_top[i][0]) < Date.parse(next_charge)) {\n        next_charge = array_top[i][0];\n    }\n}\n\nmsg.next_charge = new Date(Date.parse(next_charge));\nflow.set('next_charge',new Date(Date.parse(next_charge)));\n\nmsg.schedule = schedule;\nflow.set('schedule',schedule);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 1090,
-        "y": 440,
+        "x": 1030,
+        "y": 260,
         "wires": [
             [
                 "c8bc3fa0.f1668",
@@ -9883,7 +9908,7 @@
         "id": "f682f5be.63caf8",
         "type": "api-current-state",
         "z": "9d235989.43e7e8",
-        "name": "",
+        "name": "ev_charged_time",
         "server": "a4a1abdf.7ba5b8",
         "version": 1,
         "outputs": 2,
@@ -9898,8 +9923,8 @@
         "entity_location": "data",
         "override_data": "msg",
         "blockInputOverrides": false,
-        "x": 540,
-        "y": 380,
+        "x": 410,
+        "y": 200,
         "wires": [
             [
                 "afe4cef0.61ea1"
@@ -9911,7 +9936,7 @@
         "id": "1a863aee.f0e2e5",
         "type": "api-current-state",
         "z": "9d235989.43e7e8",
-        "name": "",
+        "name": "ev_charge_target",
         "server": "a4a1abdf.7ba5b8",
         "version": 1,
         "outputs": 2,
@@ -9926,8 +9951,8 @@
         "entity_location": "data",
         "override_data": "msg",
         "blockInputOverrides": false,
-        "x": 620,
-        "y": 440,
+        "x": 430,
+        "y": 260,
         "wires": [
             [
                 "70a91f93.6bc53"
@@ -9945,8 +9970,8 @@
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nvar target_time = new Date()\nflow.set('target_time',target_time);\n",
         "finalize": "",
-        "x": 830,
-        "y": 380,
+        "x": 610,
+        "y": 200,
         "wires": [
             [
                 "1a863aee.f0e2e5"
@@ -9957,7 +9982,7 @@
         "id": "70a91f93.6bc53",
         "type": "api-current-state",
         "z": "9d235989.43e7e8",
-        "name": "",
+        "name": "battery_level",
         "server": "a4a1abdf.7ba5b8",
         "version": 1,
         "outputs": 2,
@@ -9972,8 +9997,8 @@
         "entity_location": "data",
         "override_data": "msg",
         "blockInputOverrides": false,
-        "x": 640,
-        "y": 500,
+        "x": 610,
+        "y": 260,
         "wires": [
             [
                 "e30a9193.526e"
@@ -9991,43 +10016,13 @@
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nvar charge_reqd_pct;\nflow.set('charge_reqd_pct',charge_reqd_pct);\n\nvar charge_reqd_kWh;\nflow.set('charge_reqd_kWh',charge_reqd_kWh);\n\nvar charge_reqd_mins;\nflow.set('charge_reqd_mins',charge_reqd_mins);\n\nvar charge_reqd_sessions;\nflow.set('charge_reqd_sessions',charge_reqd_sessions);\n",
         "finalize": "",
-        "x": 930,
-        "y": 480,
+        "x": 810,
+        "y": 260,
         "wires": [
             [
                 "bb22b434.6d70a8"
             ]
         ]
-    },
-    {
-        "id": "605389a1.550af8",
-        "type": "inject",
-        "z": "9d235989.43e7e8",
-        "name": "Check tesla info",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "180",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 95,
-        "y": 2140,
-        "wires": [
-            [
-                "36076e2f.3988e2"
-            ]
-        ],
-        "l": false
     },
     {
         "id": "36076e2f.3988e2",
@@ -10048,8 +10043,8 @@
         "entity_location": "data",
         "override_data": "msg",
         "blockInputOverrides": false,
-        "x": 135,
-        "y": 2160,
+        "x": 235,
+        "y": 1920,
         "wires": [
             [
                 "8fce1bf7.a95fe8"
@@ -10077,14 +10072,14 @@
         "entity_location": "data",
         "override_data": "msg",
         "blockInputOverrides": false,
-        "x": 175,
-        "y": 2140,
+        "x": 295,
+        "y": 1900,
         "wires": [
             [
-                "5e961170.8736c"
+                "d9bc9bd0.c5f5e8"
             ],
             [
-                "ba31a42b.31beb8"
+                "f50c8a96.fe2ff8"
             ]
         ],
         "l": false
@@ -10095,8 +10090,8 @@
         "z": "9d235989.43e7e8",
         "bot": "61c78e43.6e203",
         "botProduction": "61c78e43.6e203",
-        "x": 250,
-        "y": 1680,
+        "x": 150,
+        "y": 1200,
         "wires": [
             [
                 "e656bba1.7530a8",
@@ -10117,8 +10112,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 670,
-        "y": 1640,
+        "x": 570,
+        "y": 1160,
         "wires": []
     },
     {
@@ -10152,8 +10147,8 @@
             }
         ],
         "outputs": 6,
-        "x": 430,
-        "y": 1680,
+        "x": 330,
+        "y": 1200,
         "wires": [
             [
                 "c3fb25c6.16b4e8"
@@ -10167,8 +10162,12 @@
             [
                 "de948291.0fe4b"
             ],
-            [],
-            []
+            [
+                "de948291.0fe4b"
+            ],
+            [
+                "de948291.0fe4b"
+            ]
         ]
     },
     {
@@ -10177,8 +10176,8 @@
         "z": "9d235989.43e7e8",
         "name": "Telegram",
         "info": "",
-        "x": 100,
-        "y": 1500,
+        "x": 80,
+        "y": 1140,
         "wires": []
     },
     {
@@ -10186,7 +10185,7 @@
         "type": "ha-time",
         "z": "9d235989.43e7e8",
         "server": "a4a1abdf.7ba5b8",
-        "name": "",
+        "name": "trigger at charged time",
         "exposeToHomeAssistant": false,
         "haConfig": [
             {
@@ -10208,11 +10207,11 @@
         "payload": "$entity().state",
         "payloadType": "jsonata",
         "debugenabled": true,
-        "x": 170,
-        "y": 980,
+        "x": 120,
+        "y": 580,
         "wires": [
             [
-                "897ab5e6.eb3338"
+                "10d32701.644329"
             ]
         ]
     },
@@ -10233,29 +10232,11 @@
         "output_location": "",
         "output_location_type": "none",
         "mustacheAltTags": false,
-        "x": 1060,
-        "y": 980,
+        "x": 600,
+        "y": 540,
         "wires": [
             [
                 "593ea6a9.084068"
-            ]
-        ]
-    },
-    {
-        "id": "897ab5e6.eb3338",
-        "type": "function",
-        "z": "9d235989.43e7e8",
-        "name": "",
-        "func": "var d_timestamp_s = msg.data.attributes.timestamp + msg.timeadjust;\nvar d_date = new Date(d_timestamp_s*1000);\n\nmsg.clear;\nmsg.payload = d_timestamp_s;\n\nmsg.message = \"EV Charge updated to \" + d_date.toDateString() + \" @ \" + d_date.getHours() + \":\" + d_date.getMinutes() + \"0\";\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 780,
-        "y": 980,
-        "wires": [
-            [
-                "6eb3520f.e55b6c"
             ]
         ]
     },
@@ -10270,68 +10251,14 @@
         "userId": "",
         "transport": "telegram",
         "store": "",
-        "x": 890,
-        "y": 1040,
+        "x": 895,
+        "y": 540,
         "wires": [
             [
                 "ace99cf8.9ecb"
             ]
-        ]
-    },
-    {
-        "id": "7cce377.1cbf3c8",
-        "type": "inject",
-        "z": "9d235989.43e7e8",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
         ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 140,
-        "y": 1040,
-        "wires": [
-            [
-                "162534e5.76b07b"
-            ]
-        ]
-    },
-    {
-        "id": "162534e5.76b07b",
-        "type": "api-current-state",
-        "z": "9d235989.43e7e8",
-        "name": "test",
-        "server": "a4a1abdf.7ba5b8",
-        "version": 1,
-        "outputs": 2,
-        "halt_if": "null",
-        "halt_if_type": "str",
-        "halt_if_compare": "is_not",
-        "override_topic": false,
-        "entity_id": "input_datetime.ev_charged_time",
-        "state_type": "str",
-        "state_location": "payload",
-        "override_payload": "msg",
-        "entity_location": "data",
-        "override_data": "msg",
-        "blockInputOverrides": false,
-        "x": 290,
-        "y": 1040,
-        "wires": [
-            [],
-            []
-        ]
+        "l": false
     },
     {
         "id": "593ea6a9.084068",
@@ -10352,13 +10279,14 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 560,
-        "y": 1040,
+        "x": 815,
+        "y": 540,
         "wires": [
             [
                 "49ba7f74.39712"
             ]
-        ]
+        ],
+        "l": false
     },
     {
         "id": "d8153c9.86997c",
@@ -10368,8 +10296,8 @@
         "links": [
             "4b6fd784.b0a178"
         ],
-        "x": 635,
-        "y": 1760,
+        "x": 535,
+        "y": 1280,
         "wires": []
     },
     {
@@ -10381,7 +10309,7 @@
             "b4ce2fd1.e8c6a"
         ],
         "x": 95,
-        "y": 1180,
+        "y": 780,
         "wires": [
             [
                 "b23bfc1a.33abb"
@@ -10399,7 +10327,7 @@
         "errorOutput": true,
         "outputs": 2,
         "x": 450,
-        "y": 1180,
+        "y": 780,
         "wires": [
             [
                 "cb2ecb6e.3320e8",
@@ -10443,7 +10371,7 @@
         "repair": false,
         "outputs": 4,
         "x": 650,
-        "y": 1180,
+        "y": 780,
         "wires": [
             [
                 "97d07095.cd714"
@@ -10479,7 +10407,7 @@
         "to": "",
         "reg": false,
         "x": 790,
-        "y": 1120,
+        "y": 720,
         "wires": [
             [
                 "6900e7cb.f0aaa8"
@@ -10506,7 +10434,7 @@
         "to": "",
         "reg": false,
         "x": 800,
-        "y": 1160,
+        "y": 760,
         "wires": [
             [
                 "6900e7cb.f0aaa8"
@@ -10533,7 +10461,7 @@
         "to": "",
         "reg": false,
         "x": 800,
-        "y": 1200,
+        "y": 800,
         "wires": [
             [
                 "6900e7cb.f0aaa8"
@@ -10560,7 +10488,7 @@
         "to": "",
         "reg": false,
         "x": 800,
-        "y": 1240,
+        "y": 840,
         "wires": [
             [
                 "6900e7cb.f0aaa8"
@@ -10587,7 +10515,7 @@
         "to": "",
         "reg": false,
         "x": 1000,
-        "y": 1160,
+        "y": 760,
         "wires": [
             [
                 "83d09d6d.32c33"
@@ -10612,7 +10540,7 @@
         "output_location_type": "none",
         "mustacheAltTags": false,
         "x": 1260,
-        "y": 1160,
+        "y": 760,
         "wires": [
             [
                 "afc2cbab.341178"
@@ -10632,8 +10560,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 680,
-        "y": 1820,
+        "x": 580,
+        "y": 1340,
         "wires": []
     },
     {
@@ -10658,7 +10586,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 640,
-        "y": 1240,
+        "y": 840,
         "wires": [
             [
                 "1d39e349.2fde5d"
@@ -10687,7 +10615,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 640,
-        "y": 1120,
+        "y": 720,
         "wires": [
             [
                 "97d07095.cd714"
@@ -10703,7 +10631,7 @@
             "d8153c9.86997c"
         ],
         "x": 95,
-        "y": 1380,
+        "y": 980,
         "wires": [
             [
                 "b1c2125e.204fe"
@@ -10721,7 +10649,7 @@
         "errorOutput": true,
         "outputs": 2,
         "x": 450,
-        "y": 1380,
+        "y": 980,
         "wires": [
             [
                 "f4190a6.eabecf8",
@@ -10752,7 +10680,7 @@
         "to": "",
         "reg": false,
         "x": 820,
-        "y": 1380,
+        "y": 980,
         "wires": [
             [
                 "a0acf18c.9fbce",
@@ -10778,7 +10706,7 @@
         "output_location_type": "none",
         "mustacheAltTags": false,
         "x": 1260,
-        "y": 1360,
+        "y": 960,
         "wires": [
             [
                 "afc2cbab.341178"
@@ -10793,8 +10721,8 @@
         "links": [
             "828b9ce5.8e268"
         ],
-        "x": 645,
-        "y": 1720,
+        "x": 545,
+        "y": 1240,
         "wires": []
     },
     {
@@ -10807,8 +10735,8 @@
             "a8ced89d.47d098",
             "620d4d4d.992fa4"
         ],
-        "x": 735,
-        "y": 1060,
+        "x": 815,
+        "y": 580,
         "wires": [
             [
                 "49ba7f74.39712"
@@ -10835,7 +10763,7 @@
         "override_data": "msg",
         "blockInputOverrides": false,
         "x": 1600,
-        "y": 1280,
+        "y": 880,
         "wires": [
             [
                 "376e2d2a.a0c0e2"
@@ -10848,13 +10776,13 @@
         "type": "function",
         "z": "9d235989.43e7e8",
         "name": "",
-        "func": "var d_timestamp_s = msg.data.attributes.timestamp;\nvar d_date = new Date(d_timestamp_s*1000);\n\nmsg.payload = \"EV Charge updated to \" + d_date.toDateString() + \" @ \" + d_date.getHours() + \":\" + d_date.getMinutes() + \"0\";\n\nreturn msg;",
+        "func": "var d_timestamp_s = msg.data.attributes.timestamp;\nvar d_date = new Date(d_timestamp_s*1000);\n\nmsg.payload = \"EV Charge updated to \" + d_date.toDateString() + \" @ \" + d_date.getHours() + \":\" + d_date.getMinutes();\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 1880,
-        "y": 1280,
+        "y": 880,
         "wires": [
             [
                 "620d4d4d.992fa4"
@@ -10870,7 +10798,7 @@
             "1a9adc23.f08d44"
         ],
         "x": 1975,
-        "y": 1280,
+        "y": 880,
         "wires": []
     },
     {
@@ -10879,17 +10807,19 @@
         "z": "9d235989.43e7e8",
         "bot": "61c78e43.6e203",
         "botProduction": "61c78e43.6e203",
-        "track": false,
+        "track": true,
         "passThrough": false,
         "errorOutput": true,
-        "outputs": 1,
-        "x": 1350,
-        "y": 1040,
+        "outputs": 2,
+        "x": 1015,
+        "y": 540,
         "wires": [
             [
                 "afbf5366.c91a8"
-            ]
-        ]
+            ],
+            []
+        ],
+        "l": false
     },
     {
         "id": "ace99cf8.9ecb",
@@ -10915,21 +10845,21 @@
             }
         ],
         "message": "{{payload}}",
-        "x": 1140,
-        "y": 1040,
+        "x": 955,
+        "y": 540,
         "wires": [
             [
-                "a468c38c.9c7be",
-                "afbf5366.c91a8"
+                "a468c38c.9c7be"
             ]
-        ]
+        ],
+        "l": false
     },
     {
         "id": "afbf5366.c91a8",
         "type": "debug",
         "z": "9d235989.43e7e8",
         "name": "",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -10937,9 +10867,10 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1550,
-        "y": 1000,
-        "wires": []
+        "x": 1075,
+        "y": 540,
+        "wires": [],
+        "l": false
     },
     {
         "id": "b23bfc1a.33abb",
@@ -10982,7 +10913,7 @@
         ],
         "message": "What day do you want the car charged?",
         "x": 240,
-        "y": 1180,
+        "y": 780,
         "wires": [
             [
                 "51d81879.ff1478"
@@ -11030,7 +10961,7 @@
         ],
         "message": "What time do you want the car charged?",
         "x": 240,
-        "y": 1380,
+        "y": 980,
         "wires": [
             [
                 "60590322.92e0bc"
@@ -11051,7 +10982,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 750,
-        "y": 1500,
+        "y": 1100,
         "wires": []
     },
     {
@@ -11059,7 +10990,7 @@
         "type": "debug",
         "z": "9d235989.43e7e8",
         "name": "",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -11067,8 +10998,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 410,
-        "y": 1760,
+        "x": 310,
+        "y": 1280,
         "wires": []
     },
     {
@@ -11085,7 +11016,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1010,
-        "y": 1420,
+        "y": 1020,
         "wires": []
     },
     {
@@ -11095,8 +11026,8 @@
         "name": "",
         "scope": null,
         "uncaught": false,
-        "x": 650,
-        "y": 860,
+        "x": 1960,
+        "y": 400,
         "wires": [
             [
                 "bcc23a22.dec378"
@@ -11116,8 +11047,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 920,
-        "y": 860,
+        "x": 2230,
+        "y": 400,
         "wires": []
     },
     {
@@ -11131,7 +11062,7 @@
         "initialize": "",
         "finalize": "",
         "x": 620,
-        "y": 1300,
+        "y": 900,
         "wires": [
             [
                 "96f31880.9b4018",
@@ -11149,8 +11080,8 @@
         "passThrough": false,
         "errorOutput": true,
         "outputs": 2,
-        "x": 1050,
-        "y": 1280,
+        "x": 1110,
+        "y": 880,
         "wires": [
             [],
             []
@@ -11170,7 +11101,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1190,
-        "y": 1220,
+        "y": 820,
         "wires": []
     },
     {
@@ -11185,7 +11116,7 @@
         "transport": "telegram",
         "store": "",
         "x": 790,
-        "y": 1300,
+        "y": 900,
         "wires": [
             [
                 "29bc65c3.99ceba"
@@ -11200,7 +11131,7 @@
         "buttons": [],
         "message": "",
         "x": 920,
-        "y": 1340,
+        "y": 940,
         "wires": [
             [
                 "707fae08.c0616"
@@ -11214,7 +11145,7 @@
         "name": "Not used",
         "info": "",
         "x": 580,
-        "y": 1300,
+        "y": 900,
         "wires": []
     },
     {
@@ -11231,7 +11162,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 410,
-        "y": 1300,
+        "y": 900,
         "wires": []
     },
     {
@@ -11502,8 +11433,8 @@
         "halt_if_type": "jsonata",
         "halt_if_compare": "lt",
         "outputs": 2,
-        "x": 160,
-        "y": 880,
+        "x": 140,
+        "y": 520,
         "wires": [
             [
                 "10d32701.644329"
@@ -11522,8 +11453,8 @@
         "precision": "",
         "retentionPolicy": "",
         "org": "organisation",
-        "x": 135,
-        "y": 1960,
+        "x": 1475,
+        "y": 380,
         "wires": [
             [
                 "9e7d51fb.955b3"
@@ -11545,15 +11476,15 @@
                 "vt": "str"
             }
         ],
-        "repeat": "1800",
+        "repeat": "86400",
         "crontab": "",
-        "once": false,
+        "once": true,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 75,
-        "y": 1960,
+        "x": 1415,
+        "y": 380,
         "wires": [
             [
                 "df4d4169.ad831"
@@ -11574,8 +11505,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 275,
-        "y": 2000,
+        "x": 1615,
+        "y": 420,
         "wires": [],
         "l": false
     },
@@ -11600,13 +11531,14 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 970,
-        "y": 520,
+        "x": 895,
+        "y": 220,
         "wires": [
             [
                 "bb22b434.6d70a8"
             ]
-        ]
+        ],
+        "l": false
     },
     {
         "id": "9e7d51fb.955b3",
@@ -11618,8 +11550,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 195,
-        "y": 1960,
+        "x": 1535,
+        "y": 380,
         "wires": [
             [
                 "be491892.3566d8",
@@ -11637,27 +11569,28 @@
             "bb22b434.6d70a8"
         ],
         "uncaught": false,
-        "x": 230,
-        "y": 780,
+        "x": 995,
+        "y": 340,
         "wires": [
             [
                 "fc385600.193b08",
                 "be2beff5.3fa56"
             ]
-        ]
+        ],
+        "l": false
     },
     {
         "id": "f94dd7b5.c32038",
         "type": "file",
         "z": "9d235989.43e7e8",
-        "name": "",
+        "name": "curr_schedule.json",
         "filename": "/data/evcharger/curr_schedule.json",
         "appendNewline": true,
         "createDir": true,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 660,
-        "y": 780,
+        "x": 1190,
+        "y": 340,
         "wires": [
             []
         ]
@@ -11681,23 +11614,14 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 420,
-        "y": 780,
+        "x": 1055,
+        "y": 340,
         "wires": [
             [
                 "f94dd7b5.c32038"
             ]
-        ]
-    },
-    {
-        "id": "25474bb7.413174",
-        "type": "comment",
-        "z": "9d235989.43e7e8",
-        "name": "Save Schedule Object",
-        "info": "",
-        "x": 120,
-        "y": 740,
-        "wires": []
+        ],
+        "l": false
     },
     {
         "id": "49a62cc1.6c0064",
@@ -11710,8 +11634,8 @@
         "userId": "",
         "transport": "telegram",
         "store": "",
-        "x": 135,
-        "y": 2340,
+        "x": 995,
+        "y": 1260,
         "wires": [
             [
                 "8f280c1f.4dca2",
@@ -11730,8 +11654,8 @@
         "passThrough": true,
         "errorOutput": true,
         "outputs": 2,
-        "x": 255,
-        "y": 2340,
+        "x": 1115,
+        "y": 1260,
         "wires": [
             [],
             []
@@ -11748,11 +11672,10 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 520,
-        "y": 2180,
+        "x": 540,
+        "y": 1880,
         "wires": [
             [
-                "6a7f2a2c.50d184",
                 "37bb0f69.5702d",
                 "907cc32a.01958"
             ]
@@ -11763,7 +11686,7 @@
         "type": "debug",
         "z": "9d235989.43e7e8",
         "name": "",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -11771,8 +11694,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 615,
-        "y": 2140,
+        "x": 1575,
+        "y": 2000,
         "wires": [],
         "l": false
     },
@@ -11786,8 +11709,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 155,
-        "y": 2300,
+        "x": 1015,
+        "y": 1220,
         "wires": [
             [
                 "49a62cc1.6c0064"
@@ -11814,8 +11737,8 @@
         "entity_location": "data",
         "override_data": "msg",
         "blockInputOverrides": false,
-        "x": 830,
-        "y": 2160,
+        "x": 1230,
+        "y": 1520,
         "wires": [
             [
                 "24e56882.9a1d08"
@@ -11844,8 +11767,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 75,
-        "y": 2440,
+        "x": 955,
+        "y": 1180,
         "wires": [
             [
                 "77974f33.e7313"
@@ -11863,8 +11786,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 210,
-        "y": 2440,
+        "x": 1090,
+        "y": 1180,
         "wires": [
             []
         ]
@@ -11882,8 +11805,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 135,
-        "y": 2380,
+        "x": 1015,
+        "y": 1300,
         "wires": [],
         "l": false
     },
@@ -11898,8 +11821,8 @@
             }
         ],
         "language": "none",
-        "x": 195,
-        "y": 2340,
+        "x": 1055,
+        "y": 1260,
         "wires": [
             [
                 "fe695e53.e372"
@@ -12011,14 +11934,14 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 615,
-        "y": 2180,
+        "x": 735,
+        "y": 1940,
         "wires": [
             [
-                "7b061ebc.12545"
+                "a5302aa2.8f80f8"
             ],
             [
-                "28ee750e.808daa"
+                "13bc6557.48782b"
             ]
         ],
         "l": false
@@ -12027,7 +11950,7 @@
         "id": "34b6b781.802068",
         "type": "server-state-changed",
         "z": "9d235989.43e7e8",
-        "name": "",
+        "name": "rates",
         "server": "a4a1abdf.7ba5b8",
         "version": 1,
         "exposeToHomeAssistant": false,
@@ -12058,8 +11981,8 @@
         "ignorePrevStateUnavailable": false,
         "ignoreCurrentStateUnknown": false,
         "ignoreCurrentStateUnavailable": false,
-        "x": 160,
-        "y": 480,
+        "x": 70,
+        "y": 100,
         "wires": [
             [
                 "19427381.656fcc"
@@ -12070,7 +11993,7 @@
         "id": "626bd9ef.7deab8",
         "type": "server-state-changed",
         "z": "9d235989.43e7e8",
-        "name": "",
+        "name": "ev_charged_time",
         "server": "a4a1abdf.7ba5b8",
         "version": 1,
         "exposeToHomeAssistant": false,
@@ -12101,8 +12024,8 @@
         "ignorePrevStateUnavailable": false,
         "ignoreCurrentStateUnknown": false,
         "ignoreCurrentStateUnavailable": false,
-        "x": 200,
-        "y": 540,
+        "x": 100,
+        "y": 160,
         "wires": [
             [
                 "19427381.656fcc"
@@ -12113,7 +12036,7 @@
         "id": "381d45b3.0f392a",
         "type": "server-state-changed",
         "z": "9d235989.43e7e8",
-        "name": "",
+        "name": "ev_charge_target",
         "server": "a4a1abdf.7ba5b8",
         "version": 1,
         "exposeToHomeAssistant": false,
@@ -12144,8 +12067,8 @@
         "ignorePrevStateUnavailable": false,
         "ignoreCurrentStateUnknown": false,
         "ignoreCurrentStateUnavailable": false,
-        "x": 200,
-        "y": 600,
+        "x": 100,
+        "y": 220,
         "wires": [
             [
                 "19427381.656fcc"
@@ -12162,8 +12085,8 @@
         "passThrough": true,
         "errorOutput": true,
         "outputs": 2,
-        "x": 1495,
-        "y": 2080,
+        "x": 1915,
+        "y": 1460,
         "wires": [
             [],
             []
@@ -12181,8 +12104,8 @@
             }
         ],
         "language": "none",
-        "x": 1435,
-        "y": 2080,
+        "x": 1855,
+        "y": 1460,
         "wires": [
             [
                 "e8839486.fbd098"
@@ -12201,8 +12124,8 @@
         "userId": "",
         "transport": "telegram",
         "store": "",
-        "x": 1375,
-        "y": 2080,
+        "x": 1795,
+        "y": 1460,
         "wires": [
             [
                 "d0f98756.5c2d18"
@@ -12220,8 +12143,8 @@
         "passThrough": true,
         "errorOutput": true,
         "outputs": 2,
-        "x": 1475,
-        "y": 2240,
+        "x": 1935,
+        "y": 1640,
         "wires": [
             [],
             []
@@ -12239,8 +12162,8 @@
             }
         ],
         "language": "none",
-        "x": 1415,
-        "y": 2240,
+        "x": 1875,
+        "y": 1640,
         "wires": [
             [
                 "9a6cc970.04ff98"
@@ -12259,8 +12182,8 @@
         "userId": "",
         "transport": "telegram",
         "store": "",
-        "x": 1355,
-        "y": 2240,
+        "x": 1815,
+        "y": 1640,
         "wires": [
             [
                 "2335934c.e2470c"
@@ -12287,8 +12210,8 @@
         "entity_location": "data",
         "override_data": "msg",
         "blockInputOverrides": false,
-        "x": 830,
-        "y": 2220,
+        "x": 1210,
+        "y": 1580,
         "wires": [
             [
                 "371a2ee8.f6f502"
@@ -12300,7 +12223,7 @@
         "id": "43f5c459.db72ac",
         "type": "ha-entity",
         "z": "9d235989.43e7e8",
-        "name": "",
+        "name": "schedule",
         "server": "a4a1abdf.7ba5b8",
         "version": 1,
         "debugenabled": false,
@@ -12340,8 +12263,8 @@
         "outputOnStateChange": false,
         "outputPayload": "$entity().state ? \"on\": \"off\"",
         "outputPayloadType": "jsonata",
-        "x": 630,
-        "y": 680,
+        "x": 1180,
+        "y": 380,
         "wires": [
             []
         ]
@@ -12351,18 +12274,19 @@
         "type": "function",
         "z": "9d235989.43e7e8",
         "name": "",
-        "func": "var schedule = flow.get(\"schedule\");\nvar i;\nvar next_time = \"none scheduled\";\n\nfor (i in schedule) {\n    //node.warn(i.charge);\n    if (schedule[i].charge == true && next_time != \"none scheduled\") {\n        next_time = i;\n    } else if (schedule[i].charge == true && schedule[i] < next_time) {\n        next_time = i; \n    }\n}\n\nmsg.payload = next_time;\n\nreturn msg;",
+        "func": "var schedule = flow.get(\"schedule\");\nvar i;\nvar next_time = \"none scheduled\";\n\nfor (i in schedule) {\n    //node.warn(i.charge);\n    if (schedule[i].charge == true && next_time != \"none scheduled\") {\n        next_time = i;\n    } else if (schedule[i].charge == true && schedule[i] < next_time) {\n        next_time = i; \n    }\n}\n\nconsole.log(JSON.stringify(schedule));\n// → '{\"b\":\"foo\",\"c\":\"bar\",\"a\":\"baz\"}'\n\nconst sched_ordered = Object.keys(schedule).sort().reduce(\n  (obj, key) => { \n    obj[key] = schedule[key]; \n    return obj;\n  }, \n  {}\n);\n\nconsole.log(JSON.stringify(sched_ordered));\n// → '{\"a\":\"baz\",\"b\":\"foo\",\"c\":\"bar\"}'\n\nmsg.payload = next_time;\n\nmsg.schedule = sched_ordered;\n\nflow.set('schedule_ordered',sched_ordered);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 460,
-        "y": 680,
+        "x": 1055,
+        "y": 380,
         "wires": [
             [
                 "43f5c459.db72ac"
             ]
-        ]
+        ],
+        "l": false
     },
     {
         "id": "3bceee65.2c5a62",
@@ -12378,20 +12302,21 @@
                 "vt": "str"
             }
         ],
-        "repeat": "",
+        "repeat": "86400",
         "crontab": "",
         "once": false,
-        "onceDelay": 0.1,
+        "onceDelay": "5",
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 290,
-        "y": 680,
+        "x": 955,
+        "y": 400,
         "wires": [
             [
                 "be2beff5.3fa56"
             ]
-        ]
+        ],
+        "l": false
     },
     {
         "id": "f206011d.35c15",
@@ -12399,8 +12324,8 @@
         "z": "9d235989.43e7e8",
         "name": "Save Schedule Object",
         "info": "",
-        "x": 120,
-        "y": 660,
+        "x": 860,
+        "y": 340,
         "wires": []
     },
     {
@@ -12412,8 +12337,8 @@
         "qos": "2",
         "datatype": "auto",
         "broker": "b113ebbe.a57308",
-        "x": 1180,
-        "y": 640,
+        "x": 2000,
+        "y": 300,
         "wires": [
             [
                 "6a393c56.3e3054"
@@ -12427,14 +12352,14 @@
         "name": "",
         "active": true,
         "tosidebar": true,
-        "console": false,
+        "console": true,
         "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1270,
-        "y": 2140,
+        "x": 1780,
+        "y": 1540,
         "wires": []
     },
     {
@@ -12475,8 +12400,8 @@
         "qos": "2",
         "datatype": "auto",
         "broker": "b113ebbe.a57308",
-        "x": 1200,
-        "y": 560,
+        "x": 2020,
+        "y": 220,
         "wires": [
             [
                 "6a393c56.3e3054"
@@ -12504,10 +12429,10 @@
         "id": "d7117d3b.44edf",
         "type": "comment",
         "z": "9d235989.43e7e8",
-        "name": "Update Max Charge",
+        "name": "Update Max Charge via Tesla App - Disabled",
         "info": "",
-        "x": 370,
-        "y": 2700,
+        "x": 210,
+        "y": 2680,
         "wires": []
     },
     {
@@ -12532,6 +12457,7 @@
         "id": "bf15fc0c.a7597",
         "type": "server-state-changed",
         "z": "9d235989.43e7e8",
+        "d": true,
         "name": "",
         "server": "a4a1abdf.7ba5b8",
         "version": 1,
@@ -12610,8 +12536,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 440,
-        "y": 2800,
+        "x": 340,
+        "y": 2780,
         "wires": [
             [
                 "8171e56e.b12718",
@@ -12663,7 +12589,8 @@
         "y": 3000,
         "wires": [
             [
-                "313ec008.2cbb8"
+                "313ec008.2cbb8",
+                "2e1850d9.198a8"
             ]
         ]
     },
@@ -12938,17 +12865,17 @@
         "type": "delay",
         "z": "9d235989.43e7e8",
         "name": "",
-        "pauseType": "delay",
+        "pauseType": "rate",
         "timeout": "5",
         "timeoutUnits": "seconds",
         "rate": "1",
-        "nbRateUnits": "1",
+        "nbRateUnits": "3",
         "rateUnits": "second",
         "randomFirst": "1",
         "randomLast": "5",
         "randomUnits": "seconds",
-        "drop": false,
-        "x": 890,
+        "drop": true,
+        "x": 910,
         "y": 3080,
         "wires": [
             [
@@ -12961,17 +12888,17 @@
         "type": "delay",
         "z": "9d235989.43e7e8",
         "name": "",
-        "pauseType": "delay",
+        "pauseType": "rate",
         "timeout": "5",
         "timeoutUnits": "seconds",
         "rate": "1",
-        "nbRateUnits": "1",
+        "nbRateUnits": "3",
         "rateUnits": "second",
         "randomFirst": "1",
         "randomLast": "5",
         "randomUnits": "seconds",
-        "drop": false,
-        "x": 710,
+        "drop": true,
+        "x": 730,
         "y": 3220,
         "wires": [
             [
@@ -13006,7 +12933,7 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 1270,
+        "x": 1290,
         "y": 3080,
         "wires": [
             [
@@ -13021,8 +12948,8 @@
         "teslaConfig": "6d6945d1.0256fc",
         "command": "startCharge",
         "name": "startCharge",
-        "x": 1070,
-        "y": 2140,
+        "x": 1490,
+        "y": 1520,
         "wires": [
             [
                 "e3643195.00c03",
@@ -13038,13 +12965,13 @@
         "teslaConfig": "6d6945d1.0256fc",
         "command": "stopCharge",
         "name": "stopCharge",
-        "x": 1070,
-        "y": 2240,
+        "x": 1490,
+        "y": 1580,
         "wires": [
             [
                 "e3643195.00c03",
-                "7ec1f541.4d99fc",
-                "f30145e2.1e1ab8"
+                "f30145e2.1e1ab8",
+                "12a042e6.f7d16d"
             ]
         ]
     },
@@ -13057,8 +12984,8 @@
             "24e56882.9a1d08"
         ],
         "uncaught": false,
-        "x": 850,
-        "y": 2100,
+        "x": 970,
+        "y": 1420,
         "wires": [
             [
                 "b9069e69.57c39"
@@ -13080,11 +13007,11 @@
         "randomLast": "5",
         "randomUnits": "seconds",
         "drop": false,
-        "x": 1060,
-        "y": 2100,
+        "x": 1140,
+        "y": 1420,
         "wires": [
             [
-                "24e56882.9a1d08"
+                "7b061ebc.12545"
             ]
         ]
     },
@@ -13093,21 +13020,21 @@
         "type": "delay",
         "z": "9d235989.43e7e8",
         "name": "",
-        "pauseType": "delay",
+        "pauseType": "rate",
         "timeout": "5",
         "timeoutUnits": "seconds",
         "rate": "1",
-        "nbRateUnits": "1",
+        "nbRateUnits": "5",
         "rateUnits": "second",
         "randomFirst": "1",
         "randomLast": "5",
         "randomUnits": "seconds",
-        "drop": false,
-        "x": 1040,
-        "y": 2280,
+        "drop": true,
+        "x": 1180,
+        "y": 1660,
         "wires": [
             [
-                "371a2ee8.f6f502"
+                "28ee750e.808daa"
             ]
         ]
     },
@@ -13120,11 +13047,11 @@
             "371a2ee8.f6f502"
         ],
         "uncaught": false,
-        "x": 910,
-        "y": 2280,
+        "x": 930,
+        "y": 1660,
         "wires": [
             [
-                "8861f9d7.1d0868"
+                "77de0c52.d62424"
             ]
         ]
     },
@@ -13148,42 +13075,18 @@
         "id": "a60fbef2.5a70d",
         "type": "mqtt in",
         "z": "9d235989.43e7e8",
+        "d": true,
         "name": "",
         "topic": "teslamate/cars/1/charge_limit_soc",
         "qos": "2",
         "datatype": "auto",
         "broker": "b113ebbe.a57308",
-        "x": 180,
-        "y": 2740,
+        "x": 160,
+        "y": 2720,
         "wires": [
             [
                 "638c6dc4.09cd44",
                 "3e456b8b.11d554"
-            ]
-        ]
-    },
-    {
-        "id": "c1cc0efb.dfb2c",
-        "type": "inject",
-        "z": "9d235989.43e7e8",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "91",
-        "payloadType": "num",
-        "x": 240,
-        "y": 2800,
-        "wires": [
-            [
-                "638c6dc4.09cd44"
             ]
         ]
     },
@@ -13213,23 +13116,13 @@
         ]
     },
     {
-        "id": "717e3183.ff7d1",
-        "type": "comment",
-        "z": "9d235989.43e7e8",
-        "name": "Check at home and plugged in",
-        "info": "",
-        "x": 150,
-        "y": 2100,
-        "wires": []
-    },
-    {
         "id": "64ce426.27aefbc",
         "type": "comment",
         "z": "9d235989.43e7e8",
         "name": "Telegram prompt to plug in",
         "info": "",
-        "x": 170,
-        "y": 2260,
+        "x": 1010,
+        "y": 1140,
         "wires": []
     },
     {
@@ -13238,15 +13131,15 @@
         "z": "9d235989.43e7e8",
         "name": "Get avg schedule from influxdb",
         "info": "",
-        "x": 150,
-        "y": 1920,
+        "x": 1490,
+        "y": 340,
         "wires": []
     },
     {
         "id": "343ab502.45dc7a",
         "type": "ha-entity",
         "z": "9d235989.43e7e8",
-        "name": "",
+        "name": "next_charge",
         "server": "a4a1abdf.7ba5b8",
         "version": 1,
         "debugenabled": false,
@@ -13259,7 +13152,7 @@
             },
             {
                 "property": "device_class",
-                "value": ""
+                "value": "timestamp"
             },
             {
                 "property": "icon",
@@ -13280,8 +13173,8 @@
         "outputOnStateChange": false,
         "outputPayload": "$entity().state ? \"on\": \"off\"",
         "outputPayloadType": "jsonata",
-        "x": 1290,
-        "y": 440,
+        "x": 1310,
+        "y": 260,
         "wires": [
             []
         ]
@@ -13306,8 +13199,8 @@
         "entityLocationType": "none",
         "checkCurrentState": true,
         "blockInputOverrides": true,
-        "x": 1270,
-        "y": 2080,
+        "x": 1690,
+        "y": 1460,
         "wires": [
             [
                 "38ff3001.d1808"
@@ -13334,8 +13227,8 @@
         "entityLocationType": "none",
         "checkCurrentState": true,
         "blockInputOverrides": true,
-        "x": 1240,
-        "y": 2240,
+        "x": 1700,
+        "y": 1640,
         "wires": [
             [
                 "57b5d79.3f3c928"
@@ -13353,8 +13246,8 @@
         "syntax": "mustache",
         "template": "Charge start attempted",
         "output": "str",
-        "x": 1225,
-        "y": 2180,
+        "x": 1595,
+        "y": 1540,
         "wires": [
             [
                 "90005520.7ba848"
@@ -13373,8 +13266,8 @@
         "syntax": "mustache",
         "template": "Charge stop attempted",
         "output": "str",
-        "x": 1275,
-        "y": 2200,
+        "x": 1655,
+        "y": 1580,
         "wires": [
             [
                 "90005520.7ba848"
@@ -13395,8 +13288,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1440,
-        "y": 2200,
+        "x": 1860,
+        "y": 1580,
         "wires": []
     },
     {
@@ -13404,18 +13297,19 @@
         "type": "function",
         "z": "9d235989.43e7e8",
         "name": "",
-        "func": "var haCtx = global.get(\"homeassistant\");\nvar configCtx = haCtx.homeAssistantProd;\n\nvar ev_location = configCtx.states[\"device_tracker.tesla_location\"].state;\nvar ev_plugged = configCtx.states[\"sensor.tesla_plugged_in\"].state;\nvar ev_charge = configCtx.states[\"sensor.tesla_battery_level\"].state;\nvar target_charge = flow.get(\"target_charge\");\n\nif (ev_location == \"home\" && ev_plugged && ev_charge < target_charge) {\n    msg.timeadjust = 3600;\n} else {\n    msg.timeadjust = 86400;\n}\nreturn msg;",
+        "func": "var haCtx = global.get(\"homeassistant\");\nvar configCtx = haCtx.homeAssistantProd;\n\nvar ev_location = configCtx.states[\"device_tracker.tesla_location\"].state;\nvar ev_plugged = configCtx.states[\"sensor.tesla_plugged_in\"].state;\nvar ev_charge = parseInt(configCtx.states[\"sensor.tesla_battery_level\"].state);\nvar target_charge = parseInt(configCtx.states[\"input_number.ev_charge_target\"].state);\nvar timeadjust = 86400;\n\nvar need_charge = ev_charge < target_charge;\n\nif (ev_location == \"home\" && ev_plugged && need_charge) {\n    timeadjust = 3600;\n} \nvar d_timestamp_old = configCtx.states[\"input_datetime.ev_charged_time\"].attributes.timestamp;\nvar d_timestamp_s = d_timestamp_old + timeadjust;\nvar d_date = new Date(d_timestamp_s*1000);\n\nmsg.clear;\nmsg.payload = d_timestamp_s;\n\nmsg.message = \"EV Charge updated to \" + d_date.toDateString() + \" @ \" + d_date.getHours() + \":\" + d_date.getMinutes();\n\nflow.set('target_charge',target_charge);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 380,
-        "y": 920,
+        "x": 355,
+        "y": 540,
         "wires": [
             [
-                "897ab5e6.eb3338"
+                "6eb3520f.e55b6c"
             ]
-        ]
+        ],
+        "l": false
     },
     {
         "id": "907cc32a.01958",
@@ -13455,10 +13349,1714 @@
         "outputOnStateChange": false,
         "outputPayload": "$entity().state ? \"on\": \"off\"",
         "outputPayloadType": "jsonata",
-        "x": 690,
+        "x": 830,
+        "y": 1820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b0eea64a.7c20f8",
+        "type": "comment",
+        "z": "9d235989.43e7e8",
+        "name": "Debug",
+        "info": "",
+        "x": 1910,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "77de0c52.d62424",
+        "type": "function",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "func": "var count = flow.get(\"count\");\n\ncount =+ 1;\n\nflow.set(\"count\", count);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1020,
+        "y": 1700,
+        "wires": [
+            [
+                "8861f9d7.1d0868"
+            ]
+        ]
+    },
+    {
+        "id": "2e1850d9.198a8",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 3000,
+        "wires": []
+    },
+    {
+        "id": "12a042e6.f7d16d",
+        "type": "switch",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "property": "trigger",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "car_charge",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1595,
+        "y": 1620,
+        "wires": [
+            [
+                "7ec1f541.4d99fc"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "c60d2b07.863c28",
+        "type": "link out",
+        "z": "3858decf.0fe052",
+        "name": "Tesla Climate",
+        "links": [
+            "897166cd.8478c8"
+        ],
+        "x": 435,
+        "y": 2080,
+        "wires": []
+    },
+    {
+        "id": "897166cd.8478c8",
+        "type": "link in",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "links": [
+            "c60d2b07.863c28"
+        ],
+        "x": 125,
+        "y": 3540,
+        "wires": [
+            [
+                "c1610fbd.07856"
+            ]
+        ]
+    },
+    {
+        "id": "69c20e32.058ce",
+        "type": "tesla-api",
+        "z": "9d235989.43e7e8",
+        "teslaConfig": "6d6945d1.0256fc",
+        "command": "climateStart",
+        "name": "climate state on",
+        "x": 740,
+        "y": 3440,
+        "wires": [
+            [
+                "b569af99.cc016"
+            ]
+        ]
+    },
+    {
+        "id": "c1610fbd.07856",
+        "type": "switch",
+        "z": "9d235989.43e7e8",
+        "name": "On or Off or Percent",
+        "property": "command",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "TurnOnRequest",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "TurnOffRequest",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 3,
+        "x": 300,
+        "y": 3540,
+        "wires": [
+            [
+                "7f8020f5.510bc",
+                "9cb037a4.06d828"
+            ],
+            [
+                "7f8020f5.510bc",
+                "624a18cc.a3e298"
+            ],
+            [
+                "7f8020f5.510bc"
+            ]
+        ]
+    },
+    {
+        "id": "7e0fa146.62171",
+        "type": "tesla-api",
+        "z": "9d235989.43e7e8",
+        "teslaConfig": "6d6945d1.0256fc",
+        "command": "climateStop",
+        "name": "climate state off",
+        "x": 740,
+        "y": 3480,
+        "wires": [
+            [
+                "b569af99.cc016"
+            ]
+        ]
+    },
+    {
+        "id": "5e5e92fa.d08dbc",
+        "type": "comment",
+        "z": "9d235989.43e7e8",
+        "name": "Climate",
+        "info": "",
+        "x": 160,
+        "y": 3500,
+        "wires": []
+    },
+    {
+        "id": "b569af99.cc016",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 890,
+        "y": 3520,
+        "wires": []
+    },
+    {
+        "id": "7f8020f5.510bc",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 3620,
+        "wires": []
+    },
+    {
+        "id": "553baa75.3d7294",
+        "type": "alexa-home",
+        "z": "3858decf.0fe052",
+        "conf": "76993064.c8927",
+        "device": "136335",
+        "acknoledge": true,
+        "name": "Tesla Climate",
+        "topic": "tez_climate",
+        "x": 110,
+        "y": 2080,
+        "wires": [
+            [
+                "c60d2b07.863c28"
+            ]
+        ]
+    },
+    {
+        "id": "9cb037a4.06d828",
+        "type": "change",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "command",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 520,
+        "y": 3440,
+        "wires": [
+            [
+                "69c20e32.058ce"
+            ]
+        ]
+    },
+    {
+        "id": "624a18cc.a3e298",
+        "type": "change",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "command",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 520,
+        "y": 3480,
+        "wires": [
+            [
+                "7e0fa146.62171"
+            ]
+        ]
+    },
+    {
+        "id": "1732408f.7cfe4f",
+        "type": "comment",
+        "z": "9d235989.43e7e8",
+        "name": "Update charge time",
+        "info": "",
+        "x": 130,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "f50c8a96.fe2ff8",
+        "type": "link out",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "links": [
+            "7b4557fc.a78d08"
+        ],
+        "x": 355,
+        "y": 2020,
+        "wires": []
+    },
+    {
+        "id": "7b4557fc.a78d08",
+        "type": "link in",
+        "z": "9d235989.43e7e8",
+        "name": "Prompt to plug in",
+        "links": [
+            "f50c8a96.fe2ff8"
+        ],
+        "x": 955,
+        "y": 1220,
+        "wires": [
+            [
+                "ba31a42b.31beb8"
+            ]
+        ]
+    },
+    {
+        "id": "a5302aa2.8f80f8",
+        "type": "api-current-state",
+        "z": "9d235989.43e7e8",
+        "name": "ev_charge_target",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "null",
+        "halt_if_type": "str",
+        "halt_if_compare": "is_not",
+        "override_topic": false,
+        "entity_id": "input_number.ev_charge_target",
+        "state_type": "num",
+        "state_location": "state",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 890,
+        "y": 1920,
+        "wires": [
+            [
+                "26ccdf12.01e74"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "13bc6557.48782b",
+        "type": "api-current-state",
+        "z": "9d235989.43e7e8",
+        "name": "battery_level",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "null",
+        "halt_if_type": "str",
+        "halt_if_compare": "is_not",
+        "override_topic": false,
+        "entity_id": "sensor.tesla_battery_level",
+        "state_type": "num",
+        "state_location": "state",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 890,
+        "y": 1980,
+        "wires": [
+            [
+                "eb87f19d.1a9c1"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "58e3e62c.bcbd18",
+        "type": "change",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "commandArgs.amt",
+                "pt": "msg",
+                "to": "state",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "commandArgs.callback",
+                "pt": "msg",
+                "to": "result",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1380,
+        "y": 1940,
+        "wires": [
+            [
+                "7a6f6b7f.71f6b4",
+                "8cc0d391.2bc0c"
+            ]
+        ]
+    },
+    {
+        "id": "7a6f6b7f.71f6b4",
+        "type": "delay",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "3",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "x": 1250,
+        "y": 2040,
+        "wires": [
+            [
+                "3b8fd2be.35a66e"
+            ]
+        ]
+    },
+    {
+        "id": "1f58107c.89c0d",
+        "type": "catch",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "scope": [
+            "3b8fd2be.35a66e"
+        ],
+        "uncaught": false,
+        "x": 1050,
+        "y": 2080,
+        "wires": [
+            [
+                "37bb0f69.5702d"
+            ]
+        ]
+    },
+    {
+        "id": "3b8fd2be.35a66e",
+        "type": "tesla-api",
+        "z": "9d235989.43e7e8",
+        "teslaConfig": "6d6945d1.0256fc",
+        "command": "setChargeLimit",
+        "name": "setChargeLimit",
+        "x": 1440,
+        "y": 2040,
+        "wires": [
+            [
+                "6a7f2a2c.50d184",
+                "825136d4.4e0d08"
+            ]
+        ]
+    },
+    {
+        "id": "8e799555.ce1248",
+        "type": "function",
+        "z": "9d235989.43e7e8",
+        "name": "node.warn",
+        "func": "var target_charge = msg.commandArgs.amt;\n\nnode.warn(\"EV Charge Limit updated to \" + target_charge);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1770,
+        "y": 2020,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "eb87f19d.1a9c1",
+        "type": "api-current-state",
+        "z": "9d235989.43e7e8",
+        "name": "charge_limit",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "state",
+        "halt_if_type": "msg",
+        "halt_if_compare": "gt",
+        "override_topic": false,
+        "entity_id": "sensor.tesla_charge_limit",
+        "state_type": "num",
+        "state_location": "limit",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 1070,
+        "y": 1980,
+        "wires": [
+            [
+                "58e3e62c.bcbd18",
+                "54eff274.ace48c"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "26ccdf12.01e74",
+        "type": "api-current-state",
+        "z": "9d235989.43e7e8",
+        "name": "charge_limit",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "state",
+        "halt_if_type": "msg",
+        "halt_if_compare": "lt",
+        "override_topic": false,
+        "entity_id": "sensor.tesla_charge_limit",
+        "state_type": "num",
+        "state_location": "limit",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 1090,
+        "y": 1920,
+        "wires": [
+            [
+                "58e3e62c.bcbd18",
+                "91a96459.666c98"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "91a96459.666c98",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1355,
+        "y": 1860,
+        "wires": [],
+        "l": false
+    },
+    {
+        "id": "54eff274.ace48c",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1355,
+        "y": 1900,
+        "wires": [],
+        "l": false
+    },
+    {
+        "id": "3b9a97ac.962c98",
+        "type": "server-state-changed",
+        "z": "9d235989.43e7e8",
+        "name": "ev_charge_target",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "input_number.ev_charge_target",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 1,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "x": 220,
+        "y": 1680,
+        "wires": [
+            [
+                "36076e2f.3988e2"
+            ]
+        ]
+    },
+    {
+        "id": "816879c.c93ff88",
+        "type": "server-state-changed",
+        "z": "9d235989.43e7e8",
+        "name": "ev_charged_time",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "input_datetime.ev_charged_time",
+        "entityidfiltertype": "exact",
+        "outputinitially": true,
+        "state_type": "str",
+        "haltifstate": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is_not",
+        "outputs": 1,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "x": 120,
+        "y": 1620,
+        "wires": [
+            [
+                "36076e2f.3988e2"
+            ]
+        ]
+    },
+    {
+        "id": "3a668890.934258",
+        "type": "server-state-changed",
+        "z": "9d235989.43e7e8",
+        "name": "location",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "device_tracker.tesla_location",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 1,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "x": 210,
+        "y": 1740,
+        "wires": [
+            [
+                "36076e2f.3988e2"
+            ]
+        ]
+    },
+    {
+        "id": "29bb3226.3fe39e",
+        "type": "ha-time",
+        "z": "9d235989.43e7e8",
+        "server": "a4a1abdf.7ba5b8",
+        "name": "",
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityId": "sensor.ev_next_charge",
+        "property": "",
+        "offset": 0,
+        "offsetType": "num",
+        "offsetUnits": "minutes",
+        "randomOffset": false,
+        "repeatDaily": false,
+        "payload": "$entity().state",
+        "payloadType": "jsonata",
+        "debugenabled": false,
+        "x": 460,
+        "y": 1620,
+        "wires": [
+            [
+                "36076e2f.3988e2"
+            ]
+        ]
+    },
+    {
+        "id": "825136d4.4e0d08",
+        "type": "switch",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "property": "payload.result",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1610,
+        "y": 2040,
+        "wires": [
+            [
+                "8e799555.ce1248"
+            ],
+            [
+                "55196942.ad01b8"
+            ]
+        ]
+    },
+    {
+        "id": "55196942.ad01b8",
+        "type": "function",
+        "z": "9d235989.43e7e8",
+        "name": "node.warn",
+        "func": "var target_charge = msg.commandArgs.amt;\n\nnode.warn(\"EV Charge Limit update failed\");\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1770,
         "y": 2060,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "7def35cd.45023c",
+        "type": "inject",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "*/30 0-23 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 375,
+        "y": 1740,
+        "wires": [
+            [
+                "36076e2f.3988e2"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "d4db7e81.f23d8",
+        "type": "interval-length",
+        "z": "9d235989.43e7e8",
+        "format": "json",
+        "bytopic": true,
+        "minimum": "",
+        "maximum": "",
+        "window": "",
+        "timeout": false,
+        "msgTimeout": "",
+        "minimumunit": "msecs",
+        "maximumunit": "msecs",
+        "windowunit": "msecs",
+        "msgTimeoutUnit": "msecs",
+        "reset": false,
+        "startup": false,
+        "msgField": "payload",
+        "timestampField": "timestamp",
+        "repeatTimeout": false,
+        "name": "",
+        "x": 2260,
+        "y": 360,
+        "wires": [
+            [
+                "b841f38d.cc946"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "b841f38d.cc946",
+        "type": "file",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "filename": "/data/evcharger/teslamate_msg_tracker",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 2550,
+        "y": 360,
+        "wires": [
+            [
+                "156d584d.d6a618"
+            ]
+        ]
+    },
+    {
+        "id": "156d584d.d6a618",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2840,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "9193f3ad.b33b6",
+        "type": "server-state-changed",
+        "z": "9d235989.43e7e8",
+        "name": "ev_charge_limit",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "sensor.tesla_charge_limit",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 1,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "x": 420,
+        "y": 1680,
+        "wires": [
+            [
+                "36076e2f.3988e2"
+            ]
+        ]
+    },
+    {
+        "id": "d9bc9bd0.c5f5e8",
+        "type": "api-current-state",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "false",
+        "halt_if_type": "bool",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.ev_manual_override",
+        "state_type": "habool",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 375,
+        "y": 1880,
+        "wires": [
+            [
+                "5e961170.8736c"
+            ],
+            []
+        ],
+        "l": false
+    },
+    {
+        "id": "8dc26db4.8413f",
+        "type": "server-state-changed",
+        "z": "9d235989.43e7e8",
+        "name": "plugged in",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "sensor.tesla_plugged_in",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 1,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "x": 160,
+        "y": 1800,
+        "wires": [
+            [
+                "36076e2f.3988e2"
+            ]
+        ]
+    },
+    {
+        "id": "6e09d94c.a1efb8",
+        "type": "function",
+        "z": "9d235989.43e7e8",
+        "name": "node.warn",
+        "func": "var target_charge = flow.get('target_charge');\n\nnode.warn(\"Charging complete at \" + target_charge);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1210,
+        "y": 2180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2237755b.c0275a",
+        "type": "chatbot-conversation",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "botDevelopment": "61c78e43.6e203",
+        "botProduction": "61c78e43.6e203",
+        "chatId": "-421910568",
+        "userId": "",
+        "transport": "telegram",
+        "store": "",
+        "x": 895,
+        "y": 2120,
+        "wires": [
+            [
+                "edd0f434.15d1b8"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "edd0f434.15d1b8",
+        "type": "chatbot-message",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "message": [
+            {
+                "message": "Car charging complete"
+            }
+        ],
+        "language": "none",
+        "x": 955,
+        "y": 2120,
+        "wires": [
+            [
+                "a4aef8c.4fc7608"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "a4aef8c.4fc7608",
+        "type": "chatbot-telegram-send",
+        "z": "9d235989.43e7e8",
+        "bot": "61c78e43.6e203",
+        "botProduction": "61c78e43.6e203",
+        "track": false,
+        "passThrough": true,
+        "errorOutput": true,
+        "outputs": 2,
+        "x": 1095,
+        "y": 2120,
+        "wires": [
+            [],
+            []
+        ],
+        "l": false
+    },
+    {
+        "id": "4a2694ec.a96cdc",
+        "type": "server-state-changed",
+        "z": "9d235989.43e7e8",
+        "name": "state",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "sensor.tesla_state",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 1,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "x": 370,
+        "y": 1800,
+        "wires": [
+            [
+                "36076e2f.3988e2"
+            ]
+        ]
+    },
+    {
+        "id": "e4b82e09.97d9",
+        "type": "inject",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 640,
+        "wires": [
+            [
+                "10d32701.644329"
+            ]
+        ]
+    },
+    {
+        "id": "2376ea63.343716",
+        "type": "server-state-changed",
+        "z": "9d235989.43e7e8",
+        "name": "ev_next_charge",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "sensor.ev_next_charge",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 1,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "x": 620,
+        "y": 1680,
+        "wires": [
+            [
+                "36076e2f.3988e2"
+            ]
+        ]
+    },
+    {
+        "id": "8cc0d391.2bc0c",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1570,
+        "y": 1940,
+        "wires": []
+    },
+    {
+        "id": "c537c3aa.9cba4",
+        "type": "http response",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1360,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "f34c0fd9.a0a1c",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1370,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "670f80e4.46043",
+        "type": "function",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "func": "var schedule = flow.get(\"schedule_ordered\");\nvar output = \"\";\nvar new_line;\n\nfor (var i in schedule ) {\n    new_line = \"<tr><td>\" + i + \"</td>\";\n    new_line = new_line.concat(\"<td>\" + schedule[i].rate + \"</td>\");\n    new_line = new_line.concat(\"<td>\" + schedule[i].charge + \"</td></tr>\" + \"\\n\");\n    output = output.concat(new_line);\n}\n \n// node.warn(output)\n\nflow.set(\"schedule_html\",output)\n\n//msg.payload = output;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 980,
+        "y": 460,
+        "wires": [
+            [
+                "73187acd.e14594"
+            ]
+        ]
+    },
+    {
+        "id": "73187acd.e14594",
+        "type": "template",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<html>\n    <head>\n</head>\n<body>\n    <table style=\"width:100%;text-align:center;font-family:'Roboto'\">\n        <tr>\n            <th>Date</th>\n            <th>Rate</th>\n            <th>Charge</th>\n        </tr>\n\n           {{{flow.schedule_html}}} \n     \n    </table>\n</body>\n</html>",
+        "output": "str",
+        "x": 1160,
+        "y": 460,
+        "wires": [
+            [
+                "f34c0fd9.a0a1c",
+                "c537c3aa.9cba4"
+            ]
+        ]
+    },
+    {
+        "id": "61ec41f0.0233d",
+        "type": "http in",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "url": "/ev_charge_table",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 760,
+        "y": 460,
+        "wires": [
+            [
+                "670f80e4.46043"
+            ]
+        ]
+    },
+    {
+        "id": "7b540804.c84d68",
+        "type": "server-state-changed",
+        "z": "9d235989.43e7e8",
+        "name": "state",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "sensor.tesla_state",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "charging",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "x": 450,
+        "y": 2180,
+        "wires": [
+            [
+                "108bd848.b391d8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "108bd848.b391d8",
+        "type": "ha-wait-until",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "server": "a4a1abdf.7ba5b8",
+        "outputs": 1,
+        "entityId": "sensor.tesla_state",
+        "entityIdFilterType": "exact",
+        "property": "state",
+        "comparator": "is",
+        "value": "suspended",
+        "valueType": "str",
+        "timeout": 0,
+        "timeoutType": "num",
+        "timeoutUnits": "seconds",
+        "entityLocation": "",
+        "entityLocationType": "none",
+        "checkCurrentState": true,
+        "blockInputOverrides": false,
+        "x": 660,
+        "y": 2180,
+        "wires": [
+            [
+                "b0ba5cf4.feda8"
+            ]
+        ]
+    },
+    {
+        "id": "b0ba5cf4.feda8",
+        "type": "api-current-state",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "server": "a4a1abdf.7ba5b8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "target_charge",
+        "halt_if_type": "flow",
+        "halt_if_compare": "gte",
+        "override_topic": false,
+        "entity_id": "sensor.tesla_battery_level",
+        "state_type": "num",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 920,
+        "y": 2180,
+        "wires": [
+            [
+                "6e09d94c.a1efb8",
+                "2237755b.c0275a"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "bea56eb6.92c88",
+        "type": "inject",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 650,
+        "y": 2140,
+        "wires": [
+            [
+                "b0ba5cf4.feda8"
+            ]
+        ]
+    },
+    {
+        "id": "8ed4dbbc.85db38",
+        "type": "catch",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "scope": [
+            "d614a26.986786"
+        ],
+        "uncaught": false,
+        "x": 270,
+        "y": 3840,
+        "wires": [
+            [
+                "91677a0c.249bd8"
+            ]
+        ]
+    },
+    {
+        "id": "91677a0c.249bd8",
+        "type": "delay",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "3",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "x": 470,
+        "y": 3800,
+        "wires": [
+            [
+                "d614a26.986786"
+            ]
+        ]
+    },
+    {
+        "id": "d614a26.986786",
+        "type": "tesla-api",
+        "z": "9d235989.43e7e8",
+        "teslaConfig": "6d6945d1.0256fc",
+        "command": "openChargePort",
+        "name": "openChargePort",
+        "x": 660,
+        "y": 3800,
+        "wires": [
+            [
+                "72e7937.48dfb6c"
+            ]
+        ]
+    },
+    {
+        "id": "72e7937.48dfb6c",
+        "type": "function",
+        "z": "9d235989.43e7e8",
+        "name": "node.warn",
+        "func": "node.warn(\"Charge Port Opened\");\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 850,
+        "y": 3800,
+        "wires": [
+            [
+                "8c86570e.063c18"
+            ]
+        ]
+    },
+    {
+        "id": "8c86570e.063c18",
+        "type": "debug",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 910,
+        "y": 3740,
+        "wires": []
+    },
+    {
+        "id": "53927292.4d25cc",
+        "type": "comment",
+        "z": "9d235989.43e7e8",
+        "name": "Open Charge Port",
+        "info": "",
+        "x": 210,
+        "y": 3740,
+        "wires": []
+    },
+    {
+        "id": "2a709abf.035176",
+        "type": "server-events",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "server": "a4a1abdf.7ba5b8",
+        "event_type": "ios.action_fired",
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "waitForRunning": true,
+        "x": 120,
+        "y": 3780,
+        "wires": [
+            [
+                "6062c2b5.828f9c"
+            ]
+        ]
+    },
+    {
+        "id": "6062c2b5.828f9c",
+        "type": "switch",
+        "z": "9d235989.43e7e8",
+        "name": "",
+        "property": "payload.event.actionName",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Open Charge Port",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 300,
+        "y": 3800,
+        "wires": [
+            [
+                "91677a0c.249bd8"
+            ]
+        ]
+    },
+    {
+        "id": "bd1a79d2.9bd6b8",
+        "type": "neo4j-bolt",
+        "z": "48de1172.3e9a5",
+        "server": "c3c0e055.d0b5b",
+        "name": "",
+        "query": "",
+        "x": 570,
+        "y": 320,
+        "wires": [
+            [
+                "da441bd7.976a58"
+            ],
+            [
+                "da441bd7.976a58"
+            ]
+        ]
+    },
+    {
+        "id": "a85715f0.53c078",
+        "type": "inject",
+        "z": "48de1172.3e9a5",
+        "name": "",
+        "props": [
+            {
+                "p": "query",
+                "v": "MATCH (n) RETURN (n)",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 380,
+        "y": 320,
+        "wires": [
+            [
+                "bd1a79d2.9bd6b8"
+            ]
+        ]
+    },
+    {
+        "id": "da441bd7.976a58",
+        "type": "debug",
+        "z": "48de1172.3e9a5",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "1af9fc6a.9640b4",
+        "type": "mqtt in",
+        "z": "48de1172.3e9a5",
+        "name": "",
+        "topic": "#",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "b113ebbe.a57308",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 390,
+        "y": 220,
+        "wires": [
+            [
+                "5bdbf192.020d8"
+            ]
+        ]
+    },
+    {
+        "id": "5bdbf192.020d8",
+        "type": "debug",
+        "z": "48de1172.3e9a5",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "2aeaa6a0.55a37a",
+        "type": "inject",
+        "z": "48de1172.3e9a5",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 270,
+        "y": 160,
+        "wires": [
+            [
+                "5fa43670.eb1da8"
+            ]
+        ]
+    },
+    {
+        "id": "5fa43670.eb1da8",
+        "type": "mqtt out",
+        "z": "48de1172.3e9a5",
+        "name": "",
+        "topic": "/neo4j/test",
+        "qos": "1",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "b113ebbe.a57308",
+        "x": 440,
+        "y": 160,
+        "wires": []
     }
 ]
